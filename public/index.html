@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Portal</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
+                <h1> Portal Academico</h1>
+            </div>
+            <nav>
+                <a href="register.html">Registrate</a>
+                <a href="students.html">Estudiantes</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <h2>bienvendo</h2>
+                    <p>Inicai session con tu cuenta</p>
+                </div>
+
+                <div class="user-type-selector">
+                    <button class="user-type-btn active" data-type="student">Estudiante</button>
+                    <button class="user-type-btn" data-type="teacher">Profesor</button>
+                    <button class="user-type-btn" data-type="employee">Empleados</button>
+                </div>
+
+                <form class="login-form" >
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-container">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail.svg" alt="Email" class="input-icon">
+                            <input type="email" id="email" name="email" placeholder="correo@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-container">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Password" class="input-icon">
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="forgot-password.html" class="forgot-password">Olvidaste contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        Login
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/arrow-right.svg" alt="Arrow" class="btn-icon">
+                    </button>
+
+                    <div class="login-link">
+                        No tienes cuenta? <a href="register.html">Registrate</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+    <table id="studentsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Carrera</th>
+                
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

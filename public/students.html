@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/students.css">
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
+                <h1> Portal Académico</h1>
+            </div>
+        </div>
+    </header>
+
+ 
+    <main class="dashboard-container">   
+  <table id="studentsTable" class="students-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Carrera</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </main>
+
+    
+
+
+
+    <script>
+     document.addEventListener('DOMContentLoaded', loadStudents);
+
+// Cargar estudiantes desde la base de datos
+async function loadStudents() {
+    try {
+        const response = await fetch('/students');
+        const students = await response.json();
+
+        const tableBody = document.querySelector('#studentsTable tbody');
+        tableBody.innerHTML = ''; // Limpiar tabla
+
+        students.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.id}</td>
+                <td>${student.first_name}</td>
+                <td>${student.last_name}</td>
+                <td>${student.email}</td>
+                <td>${student.career}</td>
+                <td>
+                    <button class="delete-btn" onclick="deleteStudent(${student.id})">Eliminar</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error al cargar estudiantes:', error);
+    }
+}
+
+// Eliminar estudiante
+async function deleteStudent(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
+        try {
+            const response = await fetch(`/students/${id}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+
+            alert(result.message);
+            loadStudents(); // Recargar tabla
+        } catch (error) {
+            console.error('Error al eliminar estudiante:', error);
+        }
+    }
+}
+
+    </script>
+</body>
+</html>

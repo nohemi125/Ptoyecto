@@ -1,0 +1,43 @@
+/* Centrar el título y la tabla */
+.title {
+    text-align: center;
+    font-size: 10px;
+    margin-bottom: 1px;
+}
+
+/* Contenedor principal que ocupa el 50% de la pantalla */
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32vh; /* 50% de la altura de la ventana */
+    margin: 0 auto;
+    border-radius: 30px;
+
+}
+
+/* Tabla */
+.students-table {
+    width: 50%;
+    border-collapse: collapse;
+    text-align: center;
+    border-radius: 30px;
+}
+
+.students-table th, .students-table td {
+    padding: 4px;
+    border: none;
+}
+
+.students-table th {
+    background-color: #4caf4c;
+    color: white;
+}
+
+.students-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.students-table tr:hover {
+    background-color: #ddd;
+}
