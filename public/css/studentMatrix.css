@@ -1,0 +1,51 @@
+.container {    
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 15rem;
+    height: 15rem;
+    margin-top: 7rem;
+    margin-left: 35rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.container div {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    gap: 8px;
+}
+
+.container p {
+    margin-left: 3.5rem;
+}
+
+.btn-register button {
+    margin-top: 2rem;
+    margin-left: 2rem;
+}
+
+button {
+    width: 8rem;
+    height: 2rem;
+    color: black;
+    font-weight: 600;
+    border: 1px solid black;
+}
+
+button:hover {
+    background-color: black;
+    color: aliceblue;
+    border-color: white;
+}
+
+button:active {
+    background-color: rgb(254, 254, 254);
+    color: black;
+    border: none;
+}
+
+.logo {
+    width: 30px;
+    height: 30px;
+}

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration - Academic Portal</title>
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/header.css">
+    <title>Student Registration - Portak Academico</title>
+    <!-- <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/header.css"> -->
     <link rel="stylesheet" href="./css/register.css">
 </head>
 <body>
@@ -16,8 +16,8 @@
                 <h1>Portal Academico</h1>
             </div>
             <nav>
-                <a href="index.html">Iniciar sesion</a>
-                <a href="students.html">estudiantes </a>
+                <a href="index.html">Login up</a>
+                <a href="students.html">estudents </a>
             </nav>
         </div>
     </header>
@@ -26,14 +26,14 @@
         <div class="register-container">
             <div class="register-box">
                 <div class="register-header">
-                    <h2>Registro de Estudiante</h2>
-                    <p>Crea tu cuenta academica</p>
+                    <h2>Register of students</h2>
+                    <p>Create you academic account </p>
                 </div>
 
                 <form class="register-form" id="registerForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="firstName">Nombre</label>
+                            <label for="firstName">Name</label>
                             <div class="input-container">
                                 <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
                                 <input type="text" id="firstName" placeholder="John" required>
@@ -75,11 +75,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="career">Carrera</label>
+                        <label for="career">Career</label>
                         <div class="input-container">
                             <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Career" class="input-icon">
                             <select id="career" required>
-                                <option value="">Selecciona tu Carrera</option>
+                                <option value="">Select your Career</option>
                                 <option value="CS">ciencia de datos</option>
                                 <option value="ENG">Aeronautica</option>
                                 <option value="BUS">Psicologia</option>
@@ -87,6 +87,9 @@
                             </select>
                         </div>
                     </div>
+
+                        <div id="error-message" style="color: red; display: none;"></div>
+
                     <div class="form-group">
                         <label>
                             <input type="checkbox" id="terms" required> Acepto los términos y condiciones
@@ -108,6 +111,8 @@
             </div>
         </div>
     </main>
+
+ <div id="error-message" style="color: red; display: none;"></div>
 
     <script src="js/register.js"></script>
 </body>

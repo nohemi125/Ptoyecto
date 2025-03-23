@@ -33,59 +33,7 @@
             <tbody></tbody>
         </table>
     </main>
+    <script src="/js/students.js" defer></script> <!-- Asegúrate de que la ruta sea correcta -->
 
-    
-
-
-
-    <script>
-     document.addEventListener('DOMContentLoaded', loadStudents);
-
-// Cargar estudiantes desde la base de datos
-async function loadStudents() {
-    try {
-        const response = await fetch('/students');
-        const students = await response.json();
-
-        const tableBody = document.querySelector('#studentsTable tbody');
-        tableBody.innerHTML = ''; // Limpiar tabla
-
-        students.forEach(student => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${student.id}</td>
-                <td>${student.first_name}</td>
-                <td>${student.last_name}</td>
-                <td>${student.email}</td>
-                <td>${student.career}</td>
-                <td>
-                    <button class="delete-btn" onclick="deleteStudent(${student.id})">Eliminar</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error al cargar estudiantes:', error);
-    }
-}
-
-// Eliminar estudiante
-async function deleteStudent(id) {
-    if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
-        try {
-            const response = await fetch(`/students/${id}`, {
-                method: 'DELETE'
-            });
-            const result = await response.json();
-
-            alert(result.message);
-            loadStudents(); // Recargar tabla
-        } catch (error) {
-            console.error('Error al eliminar estudiante:', error);
-        }
-    }
-}
-
-    </script>
 </body>
 </html>

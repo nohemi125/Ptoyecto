@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Coiny&family=Noto+Sans+JP:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Signika+Negative:wght@300..700&family=Slabo+27px&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/login.css">
@@ -26,14 +29,19 @@
         <div class="login-container">
             <div class="login-box">
                 <div class="login-header">
-                    <h2>bienvendo</h2>
-                    <p>Inicai session con tu cuenta</p>
+                    <h2>Bienvendo</h2>
+                    <p>Inicia sesion con tu cuenta</p>
                 </div>
 
-                <div class="user-type-selector">
+                <!-- <div class="user-type-selector">
                     <button class="user-type-btn active" data-type="student">Estudiante</button>
-                    <button class="user-type-btn" data-type="teacher">Profesor</button>
+                    <button class="user-type-btn" data-type="teacher" >Profesor</button>
                     <button class="user-type-btn" data-type="employee">Empleados</button>
+                </div> -->
+
+                <div class="selector">
+                    <a href="indexEstudiantes.html" class="user-type-btn" style="text-decoration: none">Estudiante</a>
+                    <a href="indexProfesores.html" class="user-type-btn" style="text-decoration: none">Profesores</a>
                 </div>
 
                 <form class="login-form" >
@@ -56,10 +64,13 @@
                     <div class="form-options">
                         <label class="remember-me">
                             <input type="checkbox" id="remember">
-                            <span>Remember me</span>
+                            <span>Recuerda me</span>
                         </label>
-                        <a href="forgot-password.html" class="forgot-password">Olvidaste contraseña?</a>
+                        <a href="forgot-password.html" class="forgot-password">¿Olvidaste contraseña?</a>
                     </div>
+
+                    <div id="error-message" class="error-message"></div>
+
 
                     <button type="submit" class="login-btn">
                         Login
@@ -67,27 +78,13 @@
                     </button>
 
                     <div class="login-link">
-                        No tienes cuenta? <a href="register.html">Registrate</a>
+                        ¿No tienes cuenta? <a href="register.html">Registrate</a>
                     </div>
                 </form>
             </div>
         </div>
     </main>
 
-
-    <table id="studentsTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Carrera</th>
-                
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 
     <script src="js/main.js"></script>
 </body>

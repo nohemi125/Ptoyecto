@@ -1,5 +1,6 @@
 
-document.getElementById('registerForm').addEventListener('submit', function (e) {
+document.getElementById('registerForm').addEventListener('submit', function (e)
+ {
     e.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
 
     // Capturar los datos del formulario
@@ -10,11 +11,32 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
     const confirmPassword = document.getElementById('confirmPassword').value;
     const career = document.getElementById('career').value;
 
-    // Validación simple para asegurarse de que las contraseñas coincidan
-    if (password !== confirmPassword) {
-        alert('Las contraseñas no coinciden');
+    // Función para mostrar mensaje de error en el DOM
+    function showError(message) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block'; // Mostrar el contenedor
+    }
+
+    // Validaciones
+    if (!email || !firstName || !lastName || !career) {
+        showError('Todos los campos son obligatorios');
         return;
     }
+
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        showError('Por favor, ingresa un correo electrónico válido.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        showError('Las contraseñas no coinciden');
+        return;
+    }
+
+    // Ocultar mensaje de error si todo está correcto
+    document.getElementById('error-message').style.display = 'none';
 
     // Crear un objeto con los datos del formulario
     const userData = {
@@ -35,60 +57,15 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
     })
     .then(response => response.json()) // Espera la respuesta del servidor
     .then(data => {
-        // Mostrar mensaje de éxito o manejar error según la respuesta
-        console.log(data);
         if (data.message === 'Usuario registrado exitosamente') {
             alert('Registro exitoso');
             window.location.href = 'index.html'; // Redirigir al login
         } else {
-            alert('Hubo un problema al registrar al usuario');
+            showError('Hubo un problema al registrar al usuario');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Hubo un problema al registrar al usuario');
+        showError('Hubo un problema al registrar al usuario');
     });
 });
-
-
-
-
-
-
-
-
-/*
-// Ruta para obtener todos los estudiantes
-app.get('/students', (req, res) => {
-    const query = 'SELECT * FROM students';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error al obtener los estudiantes:', err);
-            return res.status(500).send({ message: 'Error en el servidor' });
-        }
-        res.json(results);  // Devolver los estudiantes como JSON
-    });
-});
-
-
-// Eliminar estudiante por ID
-app.delete('/students/:id', (req, res) => {
-    const { id } = req.params;
-    const query = 'DELETE FROM students WHERE id = ?';
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send({ message: 'Error al eliminar el registro' });
-        }
-        res.send({ message: 'Registro eliminado exitosamente' });
-    });
-});
-
-app.get('/dashboard', (req, res) => {
-    res.sendFile(__dirname + '/public/dashboard.html'); // Sirve el archivo dashboard.html
-});
-
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
-});*/

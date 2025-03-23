@@ -1,10 +1,12 @@
+
 const express = require('express');
+const session = require('express-session'); // para guardar la info de inicio de sesion 
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt'); // Importar bcrypt
 const crypto = require('crypto'); // Para generar un token aleatorio
  
-const nodemailer = require('nodemailer'); // Asegúrate de tener esta importación
+const nodemailer = require('nodemailer'); 
 
 
 const app = express();
@@ -15,17 +17,22 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'portal_academico'
+    database: 'students'
 });
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'tuemail@gmail.com',  // Cambia esto por tu dirección de Gmail
-        pass: 'contraseña_de_aplicación'  // Usa la contraseña de aplicación generada
+        user: 'email@gmail.com',  
+        pass: 'contraseña'  
     }
 });
 
+app.use(session({
+    secret: 'secreto',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Conexión a la base de datos
 db.connect(err => {
@@ -194,7 +201,7 @@ app.delete('/students/:id', (req, res) => {
             console.error(err);
             return res.status(500).send({ message: 'Error al eliminar el registro' });
         }
-        res.send({ message: 'Registro eliminado exitosamente' });
+        res.send({ message: 'Estudiante eliminado exitosamente' });
     });
 });
 
@@ -206,9 +213,11 @@ app.get('/dashboard', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
+
+
+
 // Ruta para cerrar sesión
 app.post('/logout', (req, res) => {
-    // Eliminar la cookie de autenticación (si usas cookies)
     res.clearCookie('auth_token'); // Asegúrate de que 'auth_token' sea el nombre de tu cookie de autenticación
     
     // Si usas sesiones de Express (con express-session), sería algo como:
@@ -218,6 +227,93 @@ app.post('/logout', (req, res) => {
     //     }
     //     res.send({ message: 'Sesión cerrada' });
     // });
+    
+    res.send({ message: 'Sesión cerrada' }); // Respuesta de éxito
+});
+
+// ruta para registrar profesores
+
+app.post('/registroProfesores', (req, res) => {
+    const { first_name, last_name, email, password, faculty, area } = req.body;
+
+    if (!first_name) {
+        return res.status(400).json({ message: 'Error: El nombre del profesor es obligatorio' });
+    }
+    
+    const query = `INSERT INTO profesores (first_name, last_name, email, password, faculty, area) VALUES (?, ?, ?, ?, ?, ?)`;
+    db.query(query, [first_name, last_name, email, password, faculty, area], (err, result) => {
+        console.log(req.body);
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error al registrar el usuario' });
+        }
+        res.json({ message: 'Usuario registrado exitosamente' });
+    });
+});    
+
+
+// Ruta para login de profesores funciona
+app.post('/indexProfesores', (req, res) => {
+    const { email, password } = req.body;
+
+    const query = `SELECT * FROM profesores WHERE email = ?`;
+    db.query(query, [email], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send({ message: 'Error en el servidor' });
+        }
+        if (results.length > 0) {
+            if (password === results[0].password) {
+                // Guardar en sesión los datos del profesor
+                req.session.user = {
+                    id: results[0].id,
+                    name: results[0].first_name                     
+                };
+
+                console.log("✅ Sesión guardada:", req.session.user); // Verifica que la sesión se guarde bien
+
+                // Redirección después del inicio de sesión
+                res.send({
+                    message: 'Inicio de sesión exitoso',
+                    redirect: '/Mteacher.html'
+                });
+            } else {
+                res.status(401).send({ message: 'Credenciales incorrectas' });
+            }
+        } else {
+            res.status(404).send({ message: 'Usuario no encontrado' });
+        }
+  });
+});
+
+
+
+
+app.post('/Mteacher', (req, res) => {
+    console.log('🔍 Sesión recibida en /Mteacher:', req.session); 
+
+    if (!req.session.user || !req.session.user.name) {
+        return res.status(400).json({ message: 'Error: No se ha identificado el profesor' });
+    }
+
+    const name_teachers = req.session.user.name;
+    const { subject, time, classroom } = req.body;
+
+    console.log(' Nombre del profesor:', name_teachers);
+
+    const query = `INSERT INTO matricula (name_teachers, subject, time, classroom) VALUES (?, ?, ?, ?)`;
+
+    db.query(query, [name_teachers, subject, time, classroom], (err, result) => {
+        if (err) {
+            console.error('Error en la consulta SQL:', err);
+            return res.status(500).json({ message: 'Error al registrar la matrícula' });
+        }
+        res.json({ message: 'Matrícula registrada exitosamente' });
+    });
+});
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('auth_token'); // Asegúrate de que 'auth_token' sea el nombre de tu cookie de autenticación
     
     res.send({ message: 'Sesión cerrada' }); // Respuesta de éxito
 });

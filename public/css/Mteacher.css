@@ -1,0 +1,144 @@
+*{
+    margin: 0;
+
+}
+.body{
+    background-color: #C9E4CA;
+}
+.navbar{
+    background-color:  #364958;
+    display: flex;
+    height: 50px;
+    gap: 20px;
+}
+
+.navbar h1{
+    color: #C9E4CA;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    /* font-family:  "Sour Gummy", sans-serif; */
+    font-size: 30px;
+    padding: 4px;
+    padding-left: 2rem;
+    
+}
+
+.navbar img{
+    width: 40px;
+    height: 40px;
+    padding-left: 20px;
+    padding-top: 5px;
+    filter: invert(91%) sepia(9%) saturate(176%) hue-rotate(74deg);
+}
+
+.main{
+    width: 20rem;
+    height: 20rem;
+    border: 2px solid #364958;
+    /* background-color: #87BBA2; */
+    backdrop-filter: blur(10px);
+
+    margin : 0 auto;
+    margin-top: 6rem;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.titulo{
+    display: flex; 
+    padding: 18px;
+    padding-left: 4rem;
+    color:#C9E4CA ;
+    height: 12px;
+    transition: 0.5s ease-in-out;
+}
+
+.titulo h1{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 20px;
+    font-weight:bold;
+}
+.titulo:hover {
+    transform: scale(1.1);
+
+  }
+
+  .box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  /* padding: 2rem ; */
+  padding-left: 2rem;
+  padding-top: 1rem;
+  }
+
+.box img{
+    width: 20px;
+    height: 20px;
+    padding-top: 2px;
+}
+
+ input{
+    width: 12rem;
+    height: 1.5rem;
+    border-radius: 5px;
+    background-color: #C9E4CA;
+    border-radius: 20px;
+    border: 1px solid #364958;
+    padding-left: 10px;
+    font-family:  "Sour Gummy", sans-serif;
+    outline: none;
+    color: #364958;
+} 
+
+
+
+.btn-matricular{
+    height: 2rem;
+    width: 12rem;
+    border-radius: 20px;
+    margin-top: 18px;
+    margin-left: 1.5rem;
+    background-color:  #364958;
+    color: #C9E4CA;
+    font-family:  "Sour Gummy", sans-serif;
+    font-size: 15px;
+    font-weight: 5px;
+    cursor: pointer;
+    border: 2px solid #364958;
+    transition: 0.5s ease-in-out;
+}
+
+.btn-matricular:hover{
+    background-color: #364958;
+    color: #C9E4CA;
+}
+.btn-matricular:active{
+    color: #55828B;
+    background-color:#C9E4CA ;
+}
+
+
+
+.video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Envía el video detrás del contenido */
+}
+
+.video video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}

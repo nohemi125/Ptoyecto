@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employe Registration - Portal Academico</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/registroProfesores.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
+                <h1>Portal Academico</h1>
+            </div>
+            <nav>
+                <a href="index.html">Iniciar sesion</a>
+                <a href="students.html">Empleados de la institucion </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="register-container">
+            <div class="register-box">
+                <div class="register-header">
+                    <h2>Registro de Empleados</h2>
+                    <p>Crea tu cuenta de labores</p>
+                </div>
+
+                <form class="register-form" id="registerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Nombre</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
+                                <input type="text" id="firstName" placeholder="John" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Apellido</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
+                                <input type="text" id="lastName" placeholder="Doe" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-container">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail.svg" alt="Email" class="input-icon">
+                            <input type="email" id="email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Password" class="input-icon">
+                                <input type="password" id="password" placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Confirm Password" class="input-icon">
+                                <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="facultad">Facultad</label>
+                        <div class="input-container">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Career" class="input-icon">
+                            <select id="facultad" required>
+                                <option value="">Area</option>
+                                <option value="CS">ingenieria</option>
+                                <option value="ENG">ciencias</option>
+                                <option value="BUS">matematicas</option>
+                                <option value="MED">Artes</option>
+                                <option value="MED">comunicacion</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                  
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="terms" required> Acepto los términos y condiciones
+                        </label>
+                    </div>
+
+                 
+                    </div>
+
+                    <button type="submit" class="register-btn">
+                        Register
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/arrow-right.svg" alt="Arrow" class="btn-icon">
+                    </button>
+
+                    <div class="login-link">
+                        Ya tienes una cuenta? <a href="indexEmpleado.html">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/register.js"></script>
+</body>
+</html>
