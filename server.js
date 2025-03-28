@@ -8,7 +8,6 @@ const crypto = require('crypto'); // Para generar un token aleatorio
  
 const nodemailer = require('nodemailer'); 
 
-
 const app = express();
 const PORT = 3000;
 
@@ -48,6 +47,7 @@ db.connect(err => {
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', 'ejs'); // Establecer el motor de plantillas EJS
 app.use(express.static(__dirname + '/public'));  // Servir archivos estáticos de la carpeta public
 
 // Ruta para registro (guardando contraseña encriptada)
@@ -145,6 +145,7 @@ app.post('/forgot-password', (req, res) => {
         });
     });
 });
+
 
 // Ruta para restablecer la contraseña con el token
 app.post('/reset-password/:token', (req, res) => {
@@ -289,31 +290,129 @@ app.post('/indexProfesores', (req, res) => {
 
 
 
-app.post('/Mteacher', (req, res) => {
-    console.log('🔍 Sesión recibida en /Mteacher:', req.session); 
+//funcion para matricualr materia
+// app.post('/Mteacher', (req, res) => {
+//     console.log('🔍 Sesión recibida en /Mteacher:', req.session); 
 
-    if (!req.session.user || !req.session.user.name) {
-        return res.status(400).json({ message: 'Error: No se ha identificado el profesor' });
+//     if (!req.session.user || !req.session.user.name) {
+//         return res.status(400).json({ message: 'Error: No se ha identificado el profesor' });
+//     }
+
+//     const name_teachers = req.session.user.name;
+//     const { subject, time, classroom } = req.body;
+
+//     console.log(' Nombre del profesor:', name_teachers);
+
+//     const query = `INSERT INTO matricula (name_teachers, subject, time, classroom) VALUES (?, ?, ?, ?)`;
+
+//     db.query(query, [name_teachers, subject, time, classroom], (err, result) => {
+//         if (err) {
+//             console.error('Error en la consulta SQL:', err);
+//             return res.status(500).json({ message: 'Error al registrar la matrícula' });
+//         }
+//         res.json({ success: true, message: 'Matrícula registrada exitosamente' });    });
+// });
+
+
+//funcion para matricular materias con ide de profesor guradado desde el inciio de session.
+// app.post('/Mteacher', (req, res) => {
+//     if (!req.session.user || !req.session.user.id || !req.session.user.name) {
+//         return res.status(401).json({ success: false, message: 'No autorizado' });
+//     }
+
+//     const { subject, time, classroom } = req.body;
+//     const teacherId = req.session.user.id;  // ID del profesor
+//     const teacherName = req.session.user.name; // Nombre del profesor
+
+//     // Asegúrate de que los 5 valores están correctamente definidos
+//     console.log("Datos a insertar:", teacherName, subject, time, classroom, teacherId);
+
+//     const query = `INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher) VALUES (?, ?, ?, ?, ?)`;
+    
+//     db.query(query, [teacherName, subject, time, classroom, teacherId], (err, result) => {
+//         if (err) {
+//             console.error('Error al matricular:', err);
+//             return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
+//         }
+
+//         res.json({ success: true, message: 'Materia matriculada correctamente' });
+//     });
+// });
+
+
+
+
+// Ruta para cerrar sesión
+
+app.post('/Mteacher', (req, res) => {
+    if (!req.session.user || !req.session.user.id || !req.session.user.name) {
+        return res.status(401).json({ success: false, message: 'No autorizado' });
     }
 
-    const name_teachers = req.session.user.name;
     const { subject, time, classroom } = req.body;
+    const teacherId = req.session.user.id;  // ID del profesor
+    const teacherName = req.session.user.name; // Nombre del profesor
 
-    console.log(' Nombre del profesor:', name_teachers);
+    // Asegúrate de que los 5 valores están correctamente definidos
+    console.log("Datos a insertar:", teacherName, subject, time, classroom, teacherId);
 
-    const query = `INSERT INTO matricula (name_teachers, subject, time, classroom) VALUES (?, ?, ?, ?)`;
-
-    db.query(query, [name_teachers, subject, time, classroom], (err, result) => {
+    const query = `INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher) VALUES (?, ?, ?, ?, ?)`;
+    
+    db.query(query, [teacherName, subject, time, classroom, teacherId], (err, result) => {
         if (err) {
-            console.error('Error en la consulta SQL:', err);
-            return res.status(500).json({ message: 'Error al registrar la matrícula' });
+            console.error('Error al matricular:', err);
+            return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
         }
-        res.json({ message: 'Matrícula registrada exitosamente' });
-    });
+
+        res.json({
+            success: true,
+            message: 'Matriculación registrada correctamente',
+            redirect: '/dashboardProfesor.html'
+        });
+         
+      });
 });
+
+
+
+
+
 
 app.post('/logout', (req, res) => {
     res.clearCookie('auth_token'); // Asegúrate de que 'auth_token' sea el nombre de tu cookie de autenticación
     
     res.send({ message: 'Sesión cerrada' }); // Respuesta de éxito
+});
+
+
+//para poner nombre de la perosn que inciio session en el dasboard.
+app.get('/perfilProfesor', (req, res) => {
+    if (req.session.user) {
+        res.json({ success: true, name: req.session.user.name });
+     }
+});
+
+
+// Ruta para obtener las materias de un profesor
+app.get('/materiasProfesor', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.status(401).json({ success: false, message: 'No autorizado' });
+    }
+
+    const teacherId = req.session.user.id;
+
+    const query = 'SELECT subject, classroom, time FROM matricula WHERE id_teacher = ?';
+    db.query(query, [teacherId], (err, results) => {
+        if (err) {
+            console.error('Error al obtener materias:', err);
+            return res.status(500).json({ success: false, message: 'Error del servidor' });
+        }
+
+        res.json({ success: true, materias: results });
+    });
+});
+
+
+app.get('/matricularMateria', (req, res) => {
+    res.sendFile(__dirname + '/public/Mteacher.html');
 });

@@ -30,27 +30,27 @@
                 <h2>Bienvenido de nuevo, <span id="userName">Usuario</span></h2>
             </div>
 
-            <div class="dashboard-grid">
+            <div class="dashboard-grid" id="materias-container">
                 <div class="dashboard-card">
                     <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
                     <h3>Matematicas</h3>
                     <p>Hora</p>
-                    <a href="">Students</a>
+                    <p>Aula</p>
+                    <a href="students.html">Students</a>
                      <div class="btn">
                         <button>Agregar Tareas</button>
                      </div>
+                </div> 
+                
+                <div class="dashboard-card">
+                    <button onclick="window.location.href='/Mteacher.html'">Agregar otra materia</button>       
                 </div>
 
-                <div class="dashboard-card">
-                    <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-                    
-                    <p class="agg">Agregar</p>
-               
-                </div>
             </div>
 
+            
 
-            <div class="students-list">
+            <!-- <div class="students-list">
                 <table>
                     <thead>
                         <tr>
@@ -70,17 +70,22 @@
                             <td><button>Delete</button></td>
                         </tr>
                   
-            </div>
+            </div> -->
 
+            <!-- Superposición que oscurece el fondo -->
+        <div class="overlay" id="overlay"></div>
 
-           <div class="container">
+        <!-- Contenedor de la ventana emergente -->
+        <div class="container" id="taskContainer">
             <div class="titulo-boton">
-             <input type="text" placeholder="Nombre de la tarea" id="titulo"><button>Enviar</button>
+                <input type="text" placeholder="Nombre de la tarea" id="titulo">
+                <button>Enviar</button>
             </div>
-             <div class="descripcion">
-                <textarea name="" id="descripcion"></textarea>
-             </div>
-           </div>
+            <div class="descripcion">
+                <textarea id="descripcion"></textarea>
+            </div>
+        </div>
+
 
 
 <!--                 
@@ -116,6 +121,6 @@
 
 
 
-    <script src="js/dashboard.js"></script>
+    <script src="js/dasboardProfesor.js"></script>
 </body>
 </html>

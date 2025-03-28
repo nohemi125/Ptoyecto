@@ -1,36 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("loginForm");
+document.getElementById('matriculaForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se recargue
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita que el formulario recargue la página
+    const subject = document.getElementById('subject').value;
+    const time = document.getElementById('time').value;
+    const classroom = document.getElementById('classroom').value;
 
-        // Capturar los valores del formulario
-        const subject = document.getElementById("Subjects").value;
-        const time = document.getElementById("time").value;
-        const classroom = document.getElementById("classroom").value;
-
-        // Enviar datos al backend
-        fetch("/Mteacher", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include", 
-            body: JSON.stringify({ subject, time, classroom })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === "Matrícula registrada exitosamente") {
-                window.location.href = "/dashboardProfesor.html"; // Redirigir después de éxito
-            } else {
-                document.getElementById("error-message").innerText = data.message;
-                document.getElementById("error-message").style.display = "block";
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            document.getElementById("error-message").innerText = "Hubo un error al matricular.";
-            document.getElementById("error-message").style.display = "block";
-        });
-    });
+    fetch('/Mteacher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject, time, classroom })
+    })
+    .then(response => response.json()) // Convertir respuesta a JSON
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            document.getElementById('error-message').innerText = data.message;
+        }
+    })
+    .catch(error => console.error('Error:', error));
 });
