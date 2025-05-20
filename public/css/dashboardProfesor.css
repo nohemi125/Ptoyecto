@@ -1,15 +1,25 @@
 
 .userName{
     margin-left: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
    
 }
 .dashboard-grid{
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
     margin-top: 2rem;
     margin-left: 5rem;
 }
+
+#materias-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+  gap: 1.5rem; /* Espacio entre las tarjetas */
+  padding: 2rem;
+}
+
 .dashboard-card{
     width: 18rem;
     height: 18rem;
@@ -18,6 +28,7 @@
     padding: 2.5rem;
     background-color: white;
 }
+
 .dashboard-card h3{
     font-size: 1.25rem;
     font-weight: 600;
@@ -62,136 +73,501 @@
     color: rgb(0, 0, 0);
 }
 
-/*table*/
-.students-list table {
-    width: 30%;
-    border-collapse: collapse; /* Elimina espacios entre bordes */
-    margin-top: 1rem;
-    background-color: white;
+
+
+
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+ 
+}
+
+
+.modal-contenido{
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 40%;           /* Aumenta el ancho */
+  height: auto;         /* Altura automática */
+  min-height: 300px;    /* Altura mínima */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+}
+
+
+.cerrar {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.botones-opciones {
+  margin-top: 40px; /* espacio entre el título y los botones */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.botones-opciones button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* espacio entre el ícono y el texto */
+  width: 45%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.botones-opciones button i {
+  font-size: 18px;
+}
+
+
+.botones-opciones button:hover {
+  background-color: #0056b3;
+}
+
+.modal-contenido button i {
+    font-size: 20px;
+    margin-right: 10px;
+    gap: 0.5rem;
+}
+
+/* asignar tareas */
+
+
+
+
+
+#seccionTareas {
+    margin: 90px auto 10px auto; /* Top - Right - Bottom - Left */
+    padding: 10px;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    font-size: 14px;
+}
+
+
+#seccionTareas h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;  /* Menos espacio debajo del título */
+}
+
+#formTarea {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  /* Reducido el espacio entre elementos */
+}
+
+#formTarea label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#formTarea input,
+#formTarea textarea {
+    padding: 8px;  /* Menor padding */
+    font-size: 14px;  /* Reducido tamaño de texto */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;  /* Menos margen entre campos */
+}
+
+#formTarea input:focus,
+#formTarea textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    padding: 8px 15px;  /* Reducido el padding de los botones */
+    font-size: 14px;  /* Reducido tamaño de texto en botones */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#Asignar {
+    background-color: #28a745;
+    color: white;
+}
+
+#Asignar:hover {
+    background-color: #218838;
+}
+
+#volverBtn {
+    background-color: #dc3545;
+    color: white;
+}
+
+#volverBtn:hover {
+    background-color: #c82333;
+}
+
+button:focus {
+    outline: none;
+}
+
+
+
+
+
+/* Estilos para la vista de lista de estudiantes */
+#vistaEstudiantes {
+    display: none; /* Ocultar por defecto */
+}
+
+#seccionTareas {
+    display: none; /* Ocultar por defecto */
+}
+
+
+/* /* Estilo para contenedor */
+.tabla-contenedor {
+  overflow-x: auto;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo general de la tabla */
+.tabla-estudiantes {
+  width: 60%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  min-width: 400px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Cabecera de la tabla */
+.tabla-estudiantes thead {
+  background-color: #1e88e5;
+  color: white;
+}
+
+/* Filas y celdas */
+.tabla-estudiantes th,
+.tabla-estudiantes td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Efecto hover en filas */
+.tabla-estudiantes tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botón volver */
+.btn-volver {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #1565c0;
+}
+
+
+  
+
+
+/* Contenedor con más margen superior */
+.tabla-contenedor {
+  overflow-x: auto;
+  margin: 40px auto 20px; /* Más margen arriba, centrado horizontal */
+  width: 80%; /* Reduce el ancho general */
+  max-width: 700px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo general de la tabla más compacta */
+.tabla-estudiantes {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px; /* Tamaño de texto más pequeño */
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Cabecera */
+.tabla-estudiantes thead {
+  background-color: #1e88e5;
+  color: white;
+}
+
+/* Celdas con menos padding */
+.tabla-estudiantes th,
+.tabla-estudiantes td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Hover */
+.tabla-estudiantes tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botón volver */
+.btn-volver {
+  display: block;
+  margin: 20px auto; /* Lo centra horizontalmente */
+  padding: 10px 20px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-volver:hover {
+  background-color: #1565c0;
+}
+
+
+.btn-volver:hover {
+  background-color: #1565c0;
+}
+
+/* Título con más separación */
+#tituloMateriaEstudiantes {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 20px;
+}
+
+
+  
+
+/* formulario de tareas */
+
+
+.register-container {
+    max-width: 48rem;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
 }
 
-.students-list th, 
-.students-list td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.students-list th {
-    color: rgb(16, 15, 15);
-    text-transform: uppercase;
-}
-
-
-.students-list tbody tr:hover {
-    background-color: #e5e7eb; /* Efecto hover en filas */
-}
-
-.students-list td {
-    color: #333;
-}
-.students-list td button {
-    color: #333;
-    width: 5rem;
-    height: 1.5rem;
-}
-.students-list td button:hover{
-    background-color: #000000;
-    color: #e5e7eb;
-}
-.students-list td button:active{
-    background-color: #ddd;
-    color: #000000;
-}
-
-
-.container {
-    display: none; /* Inicialmente está oculta */
-    width: 30%;
-    margin: 10px;
-    border: 1px solid black;
-    padding-left: 30px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-radius: 10px;
-    position: fixed; /* Fija la ventana en la pantalla */
-    top: 50%; /* Centrada verticalmente */
-    left: 50%; /* Centrada horizontalmente */
-    transform: translate(-50%, -50%); /* Para centrar correctamente */
+.register-box {
     background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
 }
 
-.overlay {
-    display: none; /* Inicialmente oculta */
-    position: fixed;
-    top: 0;
-    left: 0;
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-header h2 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #4caf4c;
+}
+
+.register-header p {
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9ca3af;
+}
+
+.input-container input,
+.input-container select {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-    z-index: 999; /* Se posiciona debajo de la ventana emergente */
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: all 0.2s;
 }
 
-/* Tu diseño original para el contenedor de título y el botón */
-.titulo-boton {
+.input-container input:focus,
+.input-container select:focus {
+    outline: none;
+    border-color: #4caf4c;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.terms-group {
+    margin: 1.5rem 0;
+}
+
+.checkbox-label {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #374151;
 }
 
-.titulo-boton input {
-    height: 28px;
-    width: 15rem;
+.terms-link {
+    color: #4caf4c;
+    text-decoration: none;
 }
 
-#titulo::placeholder {
-    padding-left: 10px;
+.terms-link:hover {
+    text-decoration: underline;
 }
 
-.titulo-boton button {
-    height: 28px;
-    width: 4rem;
-    color: black;
-    font-weight: 600;
-}
-
-/* Estilos para el área de la descripción */
-.descripcion textarea {
-    width: 19rem;
-    height: 15rem;
-}
-
-#descripcion {
-    padding: 12px;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+.register-btn {
+    width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .modal-contenido {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
+    gap: 0.5rem;
+    background-color: #4caf4c;
+    color: white;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.register-btn:hover {
+    background-color: #35dd13;
+}
+
+.btn-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.login-link a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
 
 
+.input-container textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    resize: vertical;
+    min-height: 80px;
+}
 
+.input-container textarea:focus {
+    outline: none;
+    border-color: #4caf4c;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
 
+button[type="button"] {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #e5e7eb; /* gris claro */
+    color: #111827; /* gris oscuro */
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
 
-
-
+button[type="button"]:hover {
+    background-color: #d1d5db;
+}
 
 
 

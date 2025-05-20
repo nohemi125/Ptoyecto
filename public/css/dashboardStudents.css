@@ -1,0 +1,363 @@
+
+.userName{
+    margin-left: 5rem;
+    margin-top: 3rem;
+   
+}
+
+.dashboard-grid{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 2rem;
+    margin-left: 5rem;
+}
+
+
+
+.dashboard-card{
+    width: 18rem;
+    height: 18rem;
+    border-radius: 15px;
+    border: 1px solid black;
+    padding: 2.5rem;
+    background-color: white;
+}
+
+
+
+.dashboard-card h3{
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card .agg{
+    display: flex;
+    align-items: center;
+    margin: 4rem 4rem;
+}
+
+.dashboard-card a{
+    color: #000000;
+    text-decoration: none;
+}
+
+
+.dashboard-card:hover{
+    transform: translateY(-2px);
+}
+
+.dashboard-card a:hover{
+ border-bottom: 1px solid black;
+}
+
+
+
+
+ 
+
+
+/*table*/
+.students-list table {
+    width: 30%;
+    border-collapse: collapse; /* Elimina espacios entre bordes */
+    margin-top: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.students-list th, 
+.students-list td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.students-list th {
+    color: rgb(16, 15, 15);
+    text-transform: uppercase;
+}
+
+
+.students-list tbody tr:hover {
+    background-color: #e5e7eb; /* Efecto hover en filas */
+}
+
+.students-list td {
+    color: #333;
+}
+.students-list td button {
+    color: #333;
+    width: 5rem;
+    height: 1.5rem;
+}
+.students-list td button:hover{
+    background-color: #000000;
+    color: #e5e7eb;
+}
+.students-list td button:active{
+    background-color: #ddd;
+    color: #000000;
+}
+
+
+/* //punto rojo */
+.punto-rojo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 12px;
+  width: 12px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+
+
+
+
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+ 
+}
+
+
+.modal-contenido{
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 40%;           /* Aumenta el ancho */
+  height: auto;         /* Altura automática */
+  min-height: 300px;    /* Altura mínima */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+}
+
+
+.cerrar {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.botones-opciones {
+  margin-top: 40px; /* espacio entre el título y los botones */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.botones-opciones button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* espacio entre el ícono y el texto */
+  width: 45%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.botones-opciones button i {
+  font-size: 18px;
+}
+
+
+.botones-opciones button:hover {
+  background-color: #0056b3;
+}
+
+.modal-contenido button i {
+    font-size: 20px;
+    margin-right: 10px;
+    gap: 0.5rem;
+}
+
+
+
+/* tabla de atreas */
+
+#tablaTareasModal {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  font-size: 1rem;
+}
+
+#tablaTareasModal th, #tablaTareasModal td {
+  padding: 12px 10px;
+  text-align: left;
+}
+
+#tablaTareasModal thead tr {
+  background: #2d7ff9;
+  color: #fff;
+ 
+}
+
+#tablaTareasModal tbody tr {
+  background: #f9f9f9;
+ border: 1px solid #191a1b;
+ border-radius: 12px;
+ cursor: pointer;
+  transition: background 0.18s;
+}
+
+#tablaTareasModal tbody tr:hover {
+  background: #e3f0ff;
+}
+
+/* Responsive modal */
+@media (max-width: 600px) {
+  .modal-contenido {
+    padding: 18px 6px;
+    width: 98%;
+    min-width: unset;
+  }
+  #tablaTareasModal th, #tablaTareasModal td {
+    padding: 8px 4px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Opcional: animación al seleccionar */
+#tablaTareasModal tbody tr.selected {
+  background: #b3d4fc !important;
+}
+
+
+
+.titulo-tarea {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.05rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hora-tarea {
+  color: #888;
+  font-size: 0.95rem;
+  margin-left: 1.5em;
+  white-space: nowrap;
+}
+
+
+
+
+/* FORMULARIO DE RESPUESTA DE TAREAS */
+
+
+.register-container {
+    width: 30rem;
+    height: 28rem;
+    margin-top: 2rem;
+    margin-left: 28rem;
+   
+    background-color: #ffffff;
+    border-radius: 0.8rem;
+    border: 1px solid #696b6d;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+
+/* //titulo */
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-header h3 {
+    font-size: 1.500rem;
+    font-weight: bold;
+    color: #4caf4c;
+}
+
+.register-header p {
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+
+.input-container .head {
+  margin-top: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ccc;
+}
+
+.input-container .desc {
+
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+
+
+
+
+
+.input-container textarea {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  resize: vertical; /* para que el usuario pueda agrandar si quiere */
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+}
+
+.botones button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  border: 1px solid #140f0f;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.register-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+

@@ -31,7 +31,7 @@ document.getElementById('registerForm').addEventListener('submit', function (e)
     }
 
     if (password !== confirmPassword) {
-        showError('Las contraseñas no coinciden');
+            alert('Las contraseñas no coinciden. Por favor, verifica e intenta nuevamente.');   
         return;
     }
 

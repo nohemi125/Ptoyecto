@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/dashboardProfesor.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -17,106 +19,156 @@
             </div>
 
             <nav>
-                <a href="#" id="logoutBtn">Cerrar Sesion</a>
+                <a href="students.html?subject=Matematicas&classroom=Aula%20101&time=10:00%20AM">Students</a>
+                <a href="#" id="logoutBtn">Cerrar Sesión</a>
             </nav>
         </div>
     </header>
 
-    
-
-    <main>
-        <div class="userName">
+    <main id="contenidoPrincipal">
+       <div class="userName">
             <!-- Overview Section -->
                 <h2>Bienvenido de nuevo, <span id="userName">Usuario</span></h2>
             </div>
+                <div class="dashboard-grid" id="materias-container">
+                    <div class="dashboard-card" data-subject="Matemáticas" data-classroom="101" data-time="08:00 AM">
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
+                        <h3>Matemáticas</h3>
+                        <p>Hora: 08:00 AM</p>
+                        <p>Aula: 101</p>
+                    </div>
 
-            <div class="dashboard-grid" id="materias-container">
-                <div class="dashboard-card">
-                    <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-                    <h3>Matematicas</h3>
-                    <p>Hora</p>
-                    <p>Aula</p>
-                    <a href="students.html">Students</a>
-                     <div class="btn">
-                        <button>Agregar Tareas</button>
-                     </div>
-                </div> 
-                
-                <div class="dashboard-card">
-                    <button onclick="window.location.href='/Mteacher.html'">Agregar otra materia</button>       
+                    <div class="dashboard-card">
+                        <button onclick="window.location.href='/Mteacher.html'">Agregar otra materia</button>       
+                    </div>
                 </div>
 
-            </div>
+    </main>
 
-            
-
-            <!-- <div class="students-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>firt_name</th>
-                            <th>last_name</th>
-                            <th>Email</th>
-                            <th>telefono</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>Doe</td>
-                            <td>Doe</td>
-
-                            <td><button>Delete</button></td>
-                        </tr>
-                  
-            </div> -->
-
-            <!-- Superposición que oscurece el fondo -->
-        <div class="overlay" id="overlay"></div>
-
-        <!-- Contenedor de la ventana emergente -->
-        <div class="container" id="taskContainer">
-            <div class="titulo-boton">
-                <input type="text" placeholder="Nombre de la tarea" id="titulo">
-                <button>Enviar</button>
-            </div>
-            <div class="descripcion">
-                <textarea id="descripcion"></textarea>
+                        <!-- Modal de opciones -->
+            <div id="modalOpciones" class="modal">
+            <div class="modal-contenido">
+                <span class="cerrar" onclick="cerrarModal()">&times;</span>
+                <h2 id="modalTitulo">Nombre de la materia</h2>
+                <div class="botones-opciones">
+                    <button onclick="agregarTarea()">
+                        <i class="fas fa-plus-circle"></i> Agregar tarea
+                    </button>
+                    <button onclick="verEstudiantes()">
+                        <i class="fas fa-users"></i> Estudiantes
+                    </button>
+                    <button onclick="editarClase()">
+                        <i class="fas fa-edit"></i> Editar clase
+                    </button>
+                    <button onclick="cerrarModal()">
+                        <i class="fas fa-times-circle"></i> Volver atrás
+                    </button>
+                </div>
             </div>
         </div>
 
 
 
-<!--                 
 
 
-             
-                <div id="studentOverview" class="role-content student-only">
-                    <div class="dashboard-grid">
-                        <div class="dashboard-card">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-                            <h3>Current Courses</h3>
-                            <p>5 Active Courses</p>
+        <!-- Vista para agregar tareas -->
+      <div id="seccionTareas" style="display: none;">
+          <div class="register-container" >
+
+                <div class="register-header">
+                    <h2>Asignación de tareas</h2>
+                </div>
+
+                <form class="register-form" id="formTarea">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="materia">Materia / Asignatura</label>
+                            <div class="input-container">
+                                <input type="text" id="materia" required readonly>
+                            </div>
                         </div>
-                        <div class="dashboard-card">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/award.svg" alt="GPA" class="card-icon">
-                            <h3>Current GPA</h3>
-                            <p>3.8/4.0</p>
-                        </div>
-                        <div class="dashboard-card">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/calendar.svg" alt="Schedule" class="card-icon">
-                            <h3>Next Class</h3>
-                            <p>Mathematics 101</p>
-                            <p>10:00 AM</p>
-                        </div>
-                        <div class="dashboard-card">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/file-text.svg" alt="Assignments" class="card-icon">
-                            <h3>Pending Tasks</h3>
-                            <p>3 Assignments Due</p>
+
+                        <div class="form-group">
+                            <label for="classroom">Aula</label>
+                            <div class="input-container">
+                                <input type="text" id="classroom" required readonly>
+                            </div>
                         </div>
                     </div>
-                </div> -->
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Título</label>
+                            <div class="input-container">
+                                <input type="text" id="title" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Descripción</label>
+                            <div class="input-container">
+                                <textarea id="description" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="time">Hora</label>
+                            <div class="input-container">
+                                <input type="time" id="time" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="due_date">Fecha de entrega</label>
+                            <div class="input-container">
+                                <input type="date" id="due_date" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="register-btn" id="Asignar" type="submit">
+                        Asignar Tarea
+                    </button>
+
+                    <button type="button" onclick="volverAlModal()">
+                        Volver
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+                            <!-- Contenedor donde irá la tabla de estudiantes -->
+                        <div id="vistaEstudiantes" style="display: none;">
+                <h2 id="tituloMateriaEstudiantes">Estudiantes inscritos en la materia</h2>
+                <div class="tabla-contenedor">
+                    <table class="tabla-estudiantes">
+                    <thead>
+                        <tr>
+                         <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                            <th>Carrera</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEstudiantes">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                    </table>
+                </div>
+                <br>
+                <button class="btn-volver" onclick="volverAlModal()">Volver</button>
+                </div>
+
+
+                  
 
 
 
@@ -124,3 +176,97 @@
     <script src="js/dasboardProfesor.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+ 
+
+
+        
+<!-- //formulario de tareas  -->
+<!--  
+   <div id="seccionTareas" style="display: none;">
+            <h2>Asignar Tarea</h2>
+            <form id="formTarea" class="formulario">
+                <input type="hidden" name="id_teacher" id="id_teacher" value="1">
+
+                <input type="text" id="materia" name="subject">
+                <label>Materia:</label>
+                <p id="materiaNombre">No seleccionada</p>
+
+                <label>Salón:</label>
+                <input type="text" name="classroom" required>
+
+                <label>Título:</label>
+                <input type="text" name="title" required>
+
+                <label>Descripción:</label>
+                <textarea name="description" required></textarea>
+
+                <label>Hora:</label>
+                <input type="time" name="time" required>
+
+                <label>Fecha de entrega:</label>
+                <input type="date" name="due_date" required>
+
+                
+            </form>
+        </div> 
+
+
+
+
+        <div class="register-container">
+            <div class="register-box">
+                <div class="register-header">
+                    <h2>Asignacion de tareas</h2>
+                    
+                </div>
+
+                <form class="register-form" id="registerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="materia">Materia / Asignatura</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
+                                <input type="text" id="materia"  required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classroom">Aula</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
+                                <input type="text" id="classroom"  required>
+                            </div>
+                        </div>
+                    </div>
+
+                  
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">titulo</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Password" class="input-icon">
+                                <input type="text" id="title"  required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripcion</label>
+                            <div class="input-container">
+                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Confirm Password" class="input-icon">
+                                <input type="text" id="description" required>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="form-group">
+                        <label for="time">hora</label>
+                        <div class="input-container">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail.svg" alt="Email" class="input-icon">
+                            <input type="time" id="time"  required>
+                        </div>
+                    </div>

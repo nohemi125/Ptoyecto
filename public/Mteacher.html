@@ -6,28 +6,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Coiny&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/Mteacher.css">
     <title>Document</title>
 </head>
 <body>
-    <nav class="navbar"> 
-        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
-        <h1>Portal academico </h1>
-    </nav>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
+                <h1>Portal Academico</h1>
+            </div>
+           
+        </div>
+    </header>
         <main class="main">
                 <div class="titulo">
                     <h1>Matricular Materias</h1>
                 </div>
 
                 <form class="box" id="matriculaForm">
-                        <!-- <div class="full-name">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
-                            <input type="text" id="name" placeholder="Nombre Completo" required>
-                        </div>
-                    </div> -->
-
-                    
-                       
                         <div class="Subjects">
                             <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/clipboard-list.svg" alt="Subjects" class="input-icon">
                             <input type="text" id="subject" placeholder="Materias a dictar" required>
@@ -45,19 +43,17 @@
                 
 
                         <div id="error-message"></div>
-
-                    
                         <button type="submit" class="btn-matricular">
                             Matricular
                         </button>       
                 </form>
 
     </main>
-    <div class="video">
+    <!-- <div class="video">
         <video autoplay muted loop>
             <source src="https://media.istockphoto.com/id/2017520935/video/university-student-girl-friends-arriving-to-university-walking-staircase-to-enter-school.mp4?s=mp4-640x640-is&k=20&c=n5_sgpdnH2z7wLULtTsvRtaM3fugO7ZjVUXpZKnv-w4=" type="video/mp4">
         </video>
-    </div>
+    </div> -->
     <script src="js/Mteacher.js"></script>
 
 </body>
