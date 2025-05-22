@@ -8,6 +8,24 @@ const overlay = document.getElementById('overlay');
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //funcion para mostrar "bienvendio" conn el nombre de la persona que inciio sesion 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/perfilStudents')
@@ -213,13 +231,15 @@ function verTareas() {
             tr.innerHTML = `<td class="titulo-tarea">${tarea.title}</td>`;
             tr.style.cursor = 'pointer';
             tr.addEventListener('click', () => {
-                tareaSeleccionadaId = tarea.id; // <-- Guarda el id aquí
+                tareaSeleccionada = tarea; // <-- Guarda el id e la tarea aquí
+                console.log('🔍 Tarea seleccionada:', tarea);
+
                 document.getElementById('user').style.display = 'none';
                 document.getElementById('modalTareas').style.display = 'none';
                 document.getElementById('materias-container').style.display = 'none';
                 document.getElementById('seccionTareas').style.display = 'block';
 
-                // Actualiza los campos del formulario de respuesta
+               
                 const h4s = document.querySelectorAll('#seccionTareas .input-container h4');
                 if (h4s.length >= 4) {
                     h4s[0].textContent = materiaSeleccionada.subject;
@@ -252,49 +272,45 @@ function verTareas() {
 
 
       
-
-// funcion para responeder la tarea
 document.getElementById('responder').addEventListener('click', function () {
-  const respuesta = document.getElementById('description').value;
+    const respuesta = document.getElementById('description').value;
+  
 
-  if (!respuesta.trim()) {
-    alert('Por favor escribe tu respuesta.');
-    return;
-  }
+    if (!respuesta.trim()) {
+        alert('Por favor escribe tu respuesta.');
+        return;
+    }
 
-  // Asegúrate de tener estos valores disponibles:
-  const id_tarea = tareaSeleccionada.id; // ← debes guardarla al seleccionar tarea
-  const id_student = sessionStorage.getItem('id_estudiante'); // ← o como lo guardes
+    if (!tareaSeleccionada) {
+        alert('No hay ninguna tarea seleccionada.');
+        return;
+    }
 
-  fetch('/responderTarea', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id_tarea,
-      id_student,
-      respuesta
+    const id_tarea = tareaSeleccionada.id;
+    console.log('🔍 ID de tarea seleccionada:', id_tarea);
+
+
+    fetch('/responderTarea', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_tarea,
+            respuesta
+        })
     })
-  })
     .then(response => response.json())
     .then(data => {
-      if (data.success) {
-        alert('✅ Respuesta enviada correctamente');
-        document.getElementById('description').value = ''; // limpia el textarea
-      } else {
-        alert('❌ No se pudo enviar la respuesta');
-      }
+        if (data.success) {
+            alert('✅ Respuesta enviada correctamente');
+            document.getElementById('description').value = ''; // limpia el textarea
+        } else {
+            alert('❌ No se pudo enviar la respuesta');
+        }
     })
     .catch(err => {
-      console.error(err);
-      alert('⚠️ Error al enviar la respuesta');
+        console.error(err);
+        alert('⚠️ Error al enviar la respuesta');
     });
-});
-
-let tareaSeleccionada = null;
-
-tr.addEventListener('click', () => {
-  tareaSeleccionada = tarea; // ← Guardas toda la tarea
- 
 });

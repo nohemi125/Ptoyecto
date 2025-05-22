@@ -20,7 +20,7 @@ app.use(express.json());
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'http://localhost:5173',  // cambia al puerto frontend que uses
+    origin: 'http://localhost:5173',  
     credentials: true
 }));
 
@@ -29,7 +29,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // porque usas localhost sin HTTPS
+      secure: false, 
       sameSite: 'lax'
     }
 }));
@@ -73,8 +73,8 @@ db.connect(err => {
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs'); // Establecer el motor de plantillas EJS
-app.use(express.static(__dirname + '/public'));  // Servir archivos estáticos de la carpeta public
+app.set('view engine', 'ejs'); 
+app.use(express.static(__dirname + '/public'));  
 
 
 
@@ -146,6 +146,76 @@ app.post('/login', (req, res) => {
         } 
     });
 });
+
+
+
+
+
+
+
+
+// //esto es una prueba para ver si funciona el login de estudiantes
+// app.post('/login', (req, res) => {
+//     const { email, password } = req.body;
+
+//     const query = `SELECT * FROM students WHERE email = ?`;
+//     db.query(query, [email], (err, results) => {
+//         if (err) {
+//             console.error(err);
+//             return res.status(500).json({ message: 'Error en el servidor' });
+//         }
+
+//         if (results.length === 0) {
+//             return res.status(401).json({ message: 'Credenciales incorrectas' });
+//         }
+
+//         const user = results[0];
+
+//         // Comparar contraseñas (idealmente deberías usar bcrypt)
+//         if (password !== user.password) {
+//             return res.status(401).json({ message: 'Credenciales incorrectas' });
+//         }
+
+//         // Guarda la sesión en Express
+//         req.session.user = {
+//             id: user.id,
+//             name: user.first_name
+//         };
+
+//         // Consulta si tiene materias registradas
+//         const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_student = ?`;
+//         db.query(checkMateriasQuery, [user.id], (err, countResults) => {
+//             if (err) {
+//                 console.error('Error al verificar materias:', err);
+//                 return res.status(500).json({ message: 'Error en el servidor' });
+//             }
+
+//             const totalMaterias = countResults[0].total;
+//             const hasMaterias = totalMaterias > 0;
+
+//             // Devolvemos los datos del usuario + info de materias
+//             return res.json({
+//                 success: true,
+//                 user: req.session.user,
+//                 hasMaterias,
+//                 redirect: hasMaterias ? '/dashboardStudents.html' : '/Mstudents.html'
+//             });
+//         });
+//     });
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -594,6 +664,7 @@ app.post('/asignarTarea', (req, res) => {
 //ruta pora que los estudinates puedan ver estas taeras asignadas por los profesores en el dasboard del rol de estudiante
 // VER TAREAS (estudiante)
 
+
 app.get('/tareasMateria', (req, res) => {
     const subject = req.query.subject || '';
     const classroom = req.query.classroom || '';
@@ -601,11 +672,11 @@ app.get('/tareasMateria', (req, res) => {
 
     console.log('Parámetros recibidos:', { subject, classroom, time });
 
-    // Consulta SQL con placeholders
-    const query = `
-    SELECT title, description, time
-    FROM tareas
-    WHERE LOWER(subject) = LOWER(?) AND LOWER(classroom) = LOWER(?)
+   
+   const query = `
+SELECT id, title, description, time
+FROM tareas
+WHERE LOWER(subject) = LOWER(?) AND LOWER(classroom) = LOWER(?)
 `;
 db.query(query, [subject.trim(), classroom.trim()], (err, results) =>  {
         if (err) {
@@ -622,29 +693,35 @@ db.query(query, [subject.trim(), classroom.trim()], (err, results) =>  {
 
 
 
+
 //ruta para que los estduiantes respondas a las tareas asignadas por los profesores y se guarde en la bd
 // RESPONDER TAREA (estudiante)
 app.post('/responderTarea', (req, res) => {
-  const { id_tarea, id_student, respuesta } = req.body;
+   
 
-  if (!id_tarea || !id_student || !respuesta) {
-    return res.status(400).json({ success: false, message: 'Faltan datos' });
-  }
-
-  const query = `
-    INSERT INTO respuestas (id_tarea, id_student, respuesta)
-    VALUES (?, ?, ?)
-  `;
-
-  db.query(query, [id_tarea, id_student, respuesta], (err, result) => {
-    if (err) {
-      console.error('❌ Error al guardar la respuesta:', err);
-      return res.status(500).json({ success: false, message: 'Error en la base de datos' });
+    const { id_tarea, respuesta } = req.body;
+    
+    if (!req.session.user) {
+        
+        return res.status(401).json({ success: false, message: 'No hay sesión activa' });
     }
 
-    console.log('✅ Respuesta guardada');
-    res.json({ success: true });
-  });
+    const id_student = req.session.user.id;
+
+    if (!id_tarea || !id_student || !respuesta) {
+        console.log('⚠️ Faltan datos en la solicitud.');
+        return res.status(400).json({ success: false, message: 'Faltan datos' });
+    }
+
+    
+    const insertQuery = `INSERT INTO respuestas (id_tarea, id_student, respuesta) VALUES (?, ?, ?)`;
+    db.query(insertQuery, [id_tarea, id_student, respuesta], (err, result) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+        }
+        console.log('✅ Respuesta guardada con éxito');
+        res.json({ success: true });
+    });
 });
 
 
