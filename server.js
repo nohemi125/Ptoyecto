@@ -98,63 +98,6 @@ app.post('/register', (req, res) => {
 
 
 // Ruta para login para sestduiantes (comparando contraseña encriptada)
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-
-    const query = `SELECT * FROM students WHERE email = ?`;
-    db.query(query, [email], (err, results) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send({ message: 'Error en el servidor' });
-        }
-        if (results.length > 0) {
-            // Comparar contraseñas (en este caso, simple comparación)
-            if (password === results[0].password) {
-
-                req.session.user = {
-                    id: results[0].id,
-                    name: results[0].first_name                     
-                };
-                console.log("✅ Sesión guardada:", req.session.user); // Verifica que la sesión se guarde bien
-
-                const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_student = ?`;
-                db.query(checkMateriasQuery, [results[0].id], (err, countResults) => {
-                    if (err) {
-                        console.error('Error al verificar materias:', err);
-                        return res.status(500).send({ message: 'Error en el servidor' });
-                    }
-
-                    const totalMaterias = countResults[0].total;
-
-                    if (totalMaterias > 0) {
-                        // Si ya tiene materias registradas, redirigir al dashboard
-                        res.send({
-                            message: 'Inicio de sesión exitoso',
-                            redirect: '/dashboardStudents.html'
-                        });
-                    } else {
-                        // Si no tiene materias registradas, redirigir a la página de matrícula
-                        res.send({
-                            message: 'Inicio de sesión exitoso',
-                            redirect: '/Mstudents.html'
-                        });
-                    }
-                });
-            } else {
-                res.status(401).send({ message: 'Credenciales incorrectas' });
-            }
-        } 
-    });
-});
-
-
-
-
-
-
-
-
-// //esto es una prueba para ver si funciona el login de estudiantes
 // app.post('/login', (req, res) => {
 //     const { email, password } = req.body;
 
@@ -162,45 +105,46 @@ app.post('/login', (req, res) => {
 //     db.query(query, [email], (err, results) => {
 //         if (err) {
 //             console.error(err);
-//             return res.status(500).json({ message: 'Error en el servidor' });
+//             return res.status(500).send({ message: 'Error en el servidor' });
 //         }
+//         if (results.length > 0) {
+//             // Comparar contraseñas (en este caso, simple comparación)
+//             if (password === results[0].password) {
 
-//         if (results.length === 0) {
-//             return res.status(401).json({ message: 'Credenciales incorrectas' });
-//         }
+//                 req.session.user = {
+//                     id: results[0].id,
+//                     name: results[0].first_name                     
+//                 };
+//                 console.log("✅ Sesión guardada:", req.session.user); // Verifica que la sesión se guarde bien
 
-//         const user = results[0];
+//                 const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_student = ?`;
+//                 db.query(checkMateriasQuery, [results[0].id], (err, countResults) => {
+//                     if (err) {
+//                         console.error('Error al verificar materias:', err);
+//                         return res.status(500).send({ message: 'Error en el servidor' });
+//                     }
+                     
 
-//         // Comparar contraseñas (idealmente deberías usar bcrypt)
-//         if (password !== user.password) {
-//             return res.status(401).json({ message: 'Credenciales incorrectas' });
-//         }
+//                     const totalMaterias = countResults[0].total;
 
-//         // Guarda la sesión en Express
-//         req.session.user = {
-//             id: user.id,
-//             name: user.first_name
-//         };
-
-//         // Consulta si tiene materias registradas
-//         const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_student = ?`;
-//         db.query(checkMateriasQuery, [user.id], (err, countResults) => {
-//             if (err) {
-//                 console.error('Error al verificar materias:', err);
-//                 return res.status(500).json({ message: 'Error en el servidor' });
+//                     if (totalMaterias > 0) {
+//                         // Si ya tiene materias registradas, redirigir al dashboard
+//                         res.send({
+//                             message: 'Inicio de sesión exitoso',
+//                             redirect: '/dashboardStudents.html'
+//                         });
+//                     } else {
+//                         // Si no tiene materias registradas, redirigir a la página de matrícula
+//                         res.send({
+//                             message: 'Inicio de sesión exitoso',
+//                             redirect: '/Mstudents.html'
+//                         });
+//                     }
+//                 });
+//             } else {
+//                 res.status(401).send({ message: 'contraseña incorrecta' });
 //             }
-
-//             const totalMaterias = countResults[0].total;
-//             const hasMaterias = totalMaterias > 0;
-
-//             // Devolvemos los datos del usuario + info de materias
-//             return res.json({
-//                 success: true,
-//                 user: req.session.user,
-//                 hasMaterias,
-//                 redirect: hasMaterias ? '/dashboardStudents.html' : '/Mstudents.html'
-//             });
-//         });
+//         } 
 //     });
 // });
 
@@ -210,11 +154,56 @@ app.post('/login', (req, res) => {
 
 
 
+//esto es una prueba de la consilta de arriba  y funciona 
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
 
+    const query = `SELECT * FROM students WHERE email = ?`;
+    db.query(query, [email], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send({ message: 'Error en el servidor' });
+        }
 
+        // Si no hay resultados, el correo no existe
+        if (results.length === 0) {
+            return res.status(401).send({ message: 'Correo incorrecto' });
+        }
 
+        // Comparar contraseñas
+        if (password === results[0].password) {
+            req.session.user = {
+                id: results[0].id,
+                name: results[0].first_name                     
+            };
+            console.log("✅ Sesión guardada:", req.session.user);
 
+            const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_student = ?`;
+            db.query(checkMateriasQuery, [results[0].id], (err, countResults) => {
+                if (err) {
+                    console.error('Error al verificar materias:', err);
+                    return res.status(500).send({ message: 'Error en el servidor' });
+                }
 
+                const totalMaterias = countResults[0].total;
+
+                if (totalMaterias > 0) {
+                    res.send({
+                        message: 'Inicio de sesión exitoso',
+                        redirect: '/dashboardStudents.html'
+                    });
+                } else {
+                    res.send({
+                        message: 'Inicio de sesión exitoso',
+                        redirect: '/Mstudents.html'
+                    });
+                }
+            });
+        } else {
+            res.status(401).send({ message: 'Contraseña incorrecta' });
+        }
+    });
+});
 
 
 
@@ -324,22 +313,44 @@ app.post('/reset-password/:token', (req, res) => {
 //   });
 // });
 
-
-app.get('/estudiantes/:materia', async (req, res) => {
-  const materia = req.params.materia;
-
-  try {
-    const [rows] = await pool.query(
-      `SELECT id_student, name_students FROM tu_tabla WHERE subject = ? AND tipo = 'estudiante'`,
-      [materia]
-    );
-
-    res.json({ success: true, estudiantes: rows });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: 'Error al obtener estudiantes' });
-  }
+app.get('/matricula', (req, res) => {
+  const sql = "SELECT * FROM matricula WHERE tipo = 'estudiante'";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).send('Error en la consulta');
+    }
+    res.json(results);
+  });
 });
+
+
+
+
+
+// mostrar estydiantes que vean materia con el mismo profesor
+app.get('/estudiantes-del-profesor', (req, res) => {
+  const { id_teacher } = req.query;
+  console.log("ID del profesor recibido:", id_teacher); 
+  if (!id_teacher) {
+    return res.status(400).json({ error: 'Falta el id del profesor' });
+  }
+
+  const sql = `
+    SELECT DISTINCT s.id, s.first_name, s.last_name, s.email, s.career
+    FROM matricula m
+    INNER JOIN students s ON m.id_student = s.id
+    WHERE m.id_teacher = ? AND m.tipo = 'estudiante'
+  `;
+
+  db.query(sql, [id_teacher], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error en la consulta' });
+    }
+    res.json(results); // devuelve todos los estudiantes con ese profesor
+  });
+});
+
+
 
 
 
@@ -374,6 +385,7 @@ app.listen(PORT, () => {
 
 
 // ruta para registrar profesores
+// ruta para registrar profesores
 app.post('/registroProfesores', (req, res) => {
     const { first_name, last_name, email, password, faculty, area } = req.body;
 
@@ -383,12 +395,15 @@ app.post('/registroProfesores', (req, res) => {
     
     const query = `INSERT INTO profesores (first_name, last_name, email, password, faculty, area) VALUES (?, ?, ?, ?, ?, ?)`;
     db.query(query, [first_name, last_name, email, password, faculty, area], (err, result) => {
-        console.log(req.body);
         if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error al registrar el usuario' });
         }
-        res.json({ message: 'Usuario registrado exitosamente' });
+        // Redirige al login de profesores
+        res.json({ 
+            message: 'Usuario registrado exitosamente',
+            redirect: '/indexProfesores.html'
+        });
     });
 });    
 
@@ -559,8 +574,34 @@ app.get('/materiasDisponibles', (req, res) => {
 
 
 
+// Ruta para obtener las materias que el estudiante ya matriculó
+app.get('/materiasEstudiante', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.status(401).json({ success: false, message: 'No autorizado' });
+    }
+    const studentId = req.session.user.id;
+    const query = `
+        SELECT subject, classroom, time, name_teachers 
+        FROM matricula 
+        WHERE id_student = ? AND tipo = 'estudiante'
+    `;
+    db.query(query, [studentId], (err, results) => {
+        if (err) {
+            console.error('Error al obtener las materias del estudiante:', err);
+            return res.status(500).json({ success: false, message: 'Error del servidor' });
+        }
+        res.json({ success: true, materias: results });
+    });
+});
 
-// Ruta para inscribir a un estudiante en una materia
+
+
+
+
+
+
+
+
 
 
 //ruta para ver las materias que el estduiante matriuclo en su dashboard
@@ -606,21 +647,32 @@ app.post('/inscribirMateria', (req, res) => {
 
 
 
-app.get('/materiasEstudiante', (req, res) => {
-    if (!req.session.user || !req.session.user.id) {
-        return res.status(401).json({ success: false, message: 'No autorizado' });
+app.get('/tareasMateria', (req, res) => {
+    const subject = req.query.subject || '';
+    const classroom = req.query.classroom || '';
+    const id_student = req.session.user ? req.session.user.id : null;
+
+    if (!id_student) {
+      return res.status(401).json({ success: false, message: 'No hay sesión activa' });
     }
 
-    const studentId = req.session.user.id;
+    const query = `
+      SELECT t.id, t.title, t.description, t.time
+      FROM tareas t
+      WHERE LOWER(t.subject) = LOWER(?) 
+        AND LOWER(t.classroom) = LOWER(?)
+        AND NOT EXISTS (
+          SELECT 1 FROM respuestas r 
+          WHERE r.id_tarea = t.id AND r.id_student = ?
+        )
+    `;
 
-    const query = `SELECT subject, classroom, time, name_teachers  FROM matricula  WHERE id_student = ? AND tipo = 'estudiante'`;
-    db.query(query, [studentId], (err, results) => {
+    db.query(query, [subject.trim(), classroom.trim(), id_student], (err, results) => {
         if (err) {
-            console.error('Error al obtener las materias del estudiante:', err);
-            return res.status(500).json({ success: false, message: 'Error del servidor' });
+            console.error('❌ Error al obtener tareas:', err);
+            return res.json({ success: false, tareas: [], message: 'Error en la base de datos' });
         }
-
-        res.json({ success: true, materias: results });
+        res.json({ success: true, tareas: results });
     });
 });
 
@@ -726,3 +778,249 @@ app.post('/responderTarea', (req, res) => {
 
 
 
+
+
+// FUNCION PARA VER LA RESPUESTA D ELOS ESTDUIANTE EN LA VISTA DE PROFESO
+// app.get('/respuestas', (req, res) => {
+//     const query = `
+//         SELECT respuestas.*, students.first_name, students.last_name
+//         FROM respuestas
+//         JOIN students ON respuestas.id_student = students.id
+//     `;
+
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Error en la consulta:', err);
+//             return res.status(500).json({ error: 'Error en la consulta' });
+//         }
+//         res.json(results);
+//     });
+// });
+
+
+
+// esto es una prueba
+
+
+// Ruta para ver respuestas de tareas enviadas por el profesor
+app.get('/respuestas-tareas-profesor', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.status(401).json({ success: false, message: 'No autorizado' });
+    }
+    const id_teacher = req.session.user.id;
+    const { subject, classroom } = req.query;
+
+    const query = `
+        SELECT 
+            r.id, 
+            r.respuesta, 
+            r.fecha_respuesta, 
+            s.first_name, 
+            s.last_name, 
+            t.title
+        FROM respuestas r
+        JOIN students s ON r.id_student = s.id
+        JOIN tareas t ON r.id_tarea = t.id
+        WHERE t.id_teacher = ? AND t.subject = ? AND t.classroom = ?
+        ORDER BY r.fecha_respuesta DESC
+    `;
+    db.query(query, [id_teacher, subject, classroom], (err, results) => {
+        if (err) {
+            console.error('Error al obtener respuestas:', err);
+            return res.status(500).json({ success: false, message: 'Error en la consulta' });
+        }
+        res.json({ success: true, respuestas: results });
+    });
+});
+
+
+
+
+
+
+
+
+// RUTA PARA VER LOS ESTUDIANTES QUE ESTAN MATRIUCLADOS EN UNA MATERIA EN ESPECIFICO
+app.get('/estudiantes-materias', (req, res) => {
+    const materia = req.query.subject;
+
+    if (!materia) {
+        return res.status(400).json({ error: 'Debe especificar la materia con ?subject=' });
+    }
+
+    const query = `
+    SELECT students.id, students.first_name, students.last_name, students.email, students.career
+    FROM matricula
+    JOIN students ON matricula.id_student = students.id
+    WHERE matricula.subject = ? AND matricula.tipo = 'estudiante'
+    ORDER BY students.last_name, students.first_name
+`;
+
+    db.query(query, [materia], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ error: 'Error en la consulta' });
+        }
+        res.json(results);
+    });
+});
+
+
+
+
+// registro de las tareas que el estduiante ha enviado
+app.get('/registros-tareas-estudiante', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.status(401).json({ success: false, message: 'No autorizado' });
+    }
+    const id_student = req.session.user.id;
+    const subject = req.query.subject;
+    const classroom = req.query.classroom;
+
+    let query = `
+        SELECT r.id AS id_respuesta, t.title, r.respuesta, r.fecha_respuesta
+        FROM respuestas r
+        JOIN tareas t ON r.id_tarea = t.id
+        WHERE r.id_student = ?
+    `;
+    const params = [id_student];
+
+    if (subject && classroom) {
+        query += ' AND t.subject = ? AND t.classroom = ?';
+        params.push(subject, classroom);
+    }
+
+    query += ' ORDER BY r.fecha_respuesta DESC';
+
+    db.query(query, params, (err, results) => {
+        if (err) {
+            console.error('Error al obtener registros:', err);
+            return res.status(500).json({ success: false, message: 'Error en la consulta' });
+        }
+        res.json({ success: true, registros: results });
+    });
+});
+
+
+
+
+// Ver todos los estudiantes que ven materias con un profesor
+app.get('/todos-estudiantes-del-profesor', (req, res) => {
+  const id_teacher = req.session.user?.id || req.query.id_teacher;
+  if (!id_teacher) {
+    return res.status(400).json({ error: 'Falta el id del profesor' });
+  }
+
+  const sql = `
+    SELECT 
+      s.id, 
+      s.first_name, 
+      s.last_name, 
+      s.career, 
+      s.email,
+      m2.subject
+    FROM matricula m1
+    JOIN matricula m2 ON m1.subject = m2.subject AND m2.tipo = 'estudiante'
+    JOIN students s ON m2.id_student = s.id
+    WHERE m1.id_teacher = ? AND m1.tipo = 'profesor'
+    ORDER BY s.last_name, s.first_name, m2.subject
+  `;
+
+  db.query(sql, [id_teacher], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error en la consulta' });
+    }
+    res.json(results);
+  });
+});
+
+
+
+
+
+// fncion para editar o elimniar tarea d eun estduiante
+// Tareas de una materia específica del profesor
+app.get('/tareas-materia', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.json({ success: false, tareas: [] });
+    }
+    const id_teacher = req.session.user.id;
+    const { subject, classroom } = req.query;
+    db.query(
+        'SELECT * FROM tareas WHERE id_teacher = ? AND subject = ? AND classroom = ?',
+        [id_teacher, subject, classroom],
+        (err, results) => {
+            if (err) return res.json({ success: false, tareas: [] });
+            res.json({ success: true, tareas: results });
+        }
+    );
+});
+
+// Editar respuesta
+app.put('/editar-respuesta', (req, res) => {
+    const { id_respuesta, respuesta } = req.body;
+    db.query('UPDATE respuestas SET respuesta = ? WHERE id = ?', [respuesta, id_respuesta], (err) => {
+        if (err) return res.json({ success: false });
+        res.json({ success: true });
+    });
+});
+
+// Eliminar respuesta
+app.delete('/eliminar-respuesta', (req, res) => {
+    const { id_respuesta } = req.body;
+    db.query('DELETE FROM respuestas WHERE id = ?', [id_respuesta], (err) => {
+        if (err) return res.json({ success: false });
+        res.json({ success: true });
+    });
+});
+
+
+
+
+// Ver tareas enviadas por el profesor
+app.get('/tareas-enviadas-profesor', (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.json({ success: false, tareas: [] });
+    }
+    const id_teacher = req.session.user.id;
+    const { subject, classroom } = req.query;
+
+    let query = 'SELECT * FROM tareas WHERE id_teacher = ?';
+    const params = [id_teacher];
+
+    if (subject && classroom) {
+        query += ' AND subject = ? AND classroom = ?';
+        params.push(subject, classroom);
+    }
+
+    db.query(query, params, (err, results) => {
+        if (err) return res.json({ success: false, tareas: [] });
+        res.json({ success: true, tareas: results });
+    });
+});
+
+// Editar tarea
+app.put('/editar-tarea', (req, res) => {
+    const { id, title, description, time, due_date } = req.body;
+    db.query('UPDATE tareas SET title=?, description=?, time=?, due_date=? WHERE id=?', [title, description, time, due_date, id], (err) => {
+        if (err) return res.json({ success: false });
+        res.json({ success: true });
+    });
+});
+
+// Eliminar tarea
+app.delete('/eliminar-tarea', (req, res) => {
+    const { id } = req.body;
+    db.query('DELETE FROM tareas WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Error al eliminar tarea:', err);
+            return res.json({ success: false });
+        }
+        // Verifica si realmente se eliminó una fila
+        if (result.affectedRows > 0) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+    });
+});

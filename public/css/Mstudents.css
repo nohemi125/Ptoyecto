@@ -3,9 +3,26 @@
     margin-left: 5rem;
     margin-top: 5rem;   
 }
-.dashboard-grid{
+
+
+
+.card-header-horizontal {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+}
+
+.card-icon-horizontal {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+}
+
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
     gap: 2rem;
     margin-top: 2rem;
     margin-left: 5rem;
@@ -17,6 +34,8 @@
     border: 1px solid black;
     padding: 2.5rem;
     background-color: white;
+     
+
 }
 .dashboard-card h3{
     font-size: 1.25rem;
@@ -61,31 +80,45 @@
 }
 .dashboard-card button:active{
     background-color: #ffffff;
-    color: rgb(0, 0, 0);
 }
 
-.btn-siguiente{
-    background-color: white;
-    width: 7rem;
-    height: 2rem;
-    border-radius: 2rem;
-    border: 2px solid green;
-    color: rgb(0, 0, 0);
-    font-weight: 550;
-}
-.btn-siguiente:hover{
-    background-color: green;
-    color: white;
+.btn-siguiente {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
+.btn-siguiente i {
+  margin-left: 8px; 
+}
+
+.btn-siguiente:hover {
+  background-color: #45a049;
+}
 
 
 
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 
 
 .container {
-    display: none; /* Inicialmente está oculta */
+    display: none; 
     width: 30%;
     margin: 10px;
     border: 1px solid black;
@@ -93,27 +126,27 @@
     padding-top: 20px;
     padding-bottom: 20px;
     border-radius: 10px;
-    position: fixed; /* Fija la ventana en la pantalla */
-    top: 50%; /* Centrada verticalmente */
-    left: 50%; /* Centrada horizontalmente */
-    transform: translate(-50%, -50%); /* Para centrar correctamente */
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    z-index: 1000; 
 }
 
 .overlay {
-    display: none; /* Inicialmente oculta */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-    z-index: 999; /* Se posiciona debajo de la ventana emergente */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 999;
 }
 
-/* Tu diseño original para el contenedor de título y el botón */
+
 .titulo-boton {
     display: flex;
     align-items: center;

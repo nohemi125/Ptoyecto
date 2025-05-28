@@ -18,9 +18,10 @@ document.querySelector('.login-form').addEventListener('submit', (event) => {
     .then(response => response.json())
     .then(data => {
         if (data.redirect) {
-            // Guardar el studentId en sessionStorage si está presente en la respuesta
+            
             if (data.studentId) {
                 sessionStorage.setItem('studentId', data.studentId);
+                errorMessage.textContent = 'contraseñas incorrecta...';
             }
             window.location.href = data.redirect;
         } else {

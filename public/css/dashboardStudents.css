@@ -5,6 +5,20 @@
    
 }
 
+
+.card-header-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+}
+
+.card-icon-horizontal {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+}
+
 .dashboard-grid{
     display: flex;
     flex-direction: row;
@@ -173,7 +187,7 @@
   width: 45%;
   padding: 12px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #4caf4c;
   color: white;
   border: none;
   border-radius: 8px;
@@ -188,7 +202,7 @@
 
 
 .botones-opciones button:hover {
-  background-color: #0056b3;
+  background-color: #19961b;
 }
 
 .modal-contenido button i {
@@ -214,7 +228,7 @@
 }
 
 #tablaTareasModal thead tr {
-  background: #2d7ff9;
+  background: #4caf4c;
   color: #fff;
  
 }
@@ -272,7 +286,7 @@
 /* FORMULARIO DE RESPUESTA DE TAREAS */
 
 
-.register-container {
+/* .register-container {
     width: 30rem;
     height: 28rem;
     margin-top: 2rem;
@@ -286,7 +300,7 @@
 }
 
 
-/* //titulo */
+
 .register-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -336,7 +350,7 @@
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  resize: vertical; /* para que el usuario pueda agrandar si quiere */
+  resize: vertical; 
   box-sizing: border-box;
   font-size: 1rem;
 }
@@ -356,8 +370,284 @@
 }
 
 .register-btn {
-  background-color: #4caf50;
+  background-color: #4caf4c;
   color: white;
 }
 
+ */
 
+
+
+
+ /* esto es una oreba de la prueba dle formlulario de tareas */
+ /* FORMULARIO DE RESPUESTA DE TAREAS */
+.register-container {
+    width: 32rem;
+    min-height: 28rem;
+    margin: 2rem auto;
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-header h3 {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #388e3c;
+    letter-spacing: 1px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.input-container .head h4,
+.input-container .desc h4 {
+    font-size: 1.08rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0.2rem 0;
+}
+
+.input-container .desc {
+    margin-top: 0.7rem;
+    padding-bottom: 0.5rem;
+}
+
+.input-container textarea {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.9rem;
+    border: 1.5px solid #bdbdbd;
+    border-radius: 0.6rem;
+    resize: vertical;
+    font-size: 1.08rem;
+    background: #f8fafc;
+    transition: border-color 0.2s;
+}
+
+.input-container textarea:focus {
+    border-color: #4caf4c;
+    outline: none;
+    background: #fff;
+}
+
+.botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.2rem;
+    margin-top: 2rem;
+}
+
+.register-btn {
+    background-color: #4caf4c;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.7rem 2.2rem;
+    font-size: 1.08rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(76,175,76,0.08);
+}
+
+.register-btn:hover {
+    background-color: #388e3c;
+}
+
+.botones button[type="button"] {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #bdbdbd;
+    padding: 0.5rem 2rem;
+    font-size: 1.08rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.botones button[type="button"]:hover {
+    background: #e0e0e0;
+}
+
+
+/* Nombre de la materia */
+.materia-nombre {
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 0.2rem;
+}
+
+.materia-profesor {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #388e3c;
+    margin-bottom: 0.5rem;
+}
+
+.materia-titulo,
+.materia-desc {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+
+.register-header h3 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #388e3c;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+
+
+
+/* estilo tabla de registro de las tareas que ha enviaod el estduiante */
+/* Ejemplo básico, puedes personalizar */
+.tabla-contenedor {
+    margin: 2rem auto;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(60,120,60,0.10);
+    padding: 2rem;
+}
+.tabla-contenedor table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tabla-contenedor th, .tabla-contenedor td {
+    border: 1px solid #e0e0e0;
+    padding: 0.7rem;
+    text-align: left;
+}
+.tabla-contenedor th {
+    background: #f8fafc;
+    font-weight: bold;
+}
+
+
+#vistaRegistros h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #388e3c;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+/* Botón volver */
+.btn-volver {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  margin-left: 25rem;
+  padding: 10px 20px;
+  background-color: #35dd13;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: #339817;
+}
+
+
+/* boton para editar y eliminar tareas espondidad*/
+/* Botones de acción en la tabla de registros */
+.btn-accion {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 6px rgba(60,120,60,0.07);
+}
+
+.btn-editar {
+  background: #1976d2;
+  color: #fff;
+}
+
+.btn-editar:hover {
+  background: #125ea2;
+}
+
+.btn-eliminar {
+  background: #d32f2f;
+  color: #fff;
+}
+
+.btn-eliminar:hover {
+  background: #a31515;
+}
+
+
+#modalEditarRespuesta textarea {
+  width: 100%;
+  min-height: 140px;
+  max-height: 300px;
+  padding: 1rem;
+  font-size: 1.08rem;
+  border: 1.5px solid #bdbdbd;
+  border-radius: 0.6rem;
+  resize: vertical;
+  background: #f8fafc;
+  margin-top: 1rem;
+  transition: border-color 0.2s;
+}
+
+#modalEditarRespuesta textarea:focus {
+  border-color: #1976d2;
+  outline: none;
+  background: #fff;
+}
+
+
+
+
+
+/* mensaje de nueva tarea agregada */
+#toastMensaje {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #388e3c;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px rgba(60,120,60,0.12);
+  z-index: 9999;
+  opacity: 0.95;
+  transition: opacity 0.3s;
+}

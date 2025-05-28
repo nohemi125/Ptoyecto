@@ -59,7 +59,7 @@ document.getElementById('registerForm').addEventListener('submit', function (e)
     .then(data => {
         if (data.message === 'Usuario registrado exitosamente') {
             alert('Registro exitoso');
-            window.location.href = 'index.html'; // Redirigir al login
+            window.location.href = 'index.html'; 
         } else {
             showError('Hubo un problema al registrar al usuario');
         }

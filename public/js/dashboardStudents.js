@@ -9,23 +9,6 @@ const overlay = document.getElementById('overlay');
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //funcion para mostrar "bienvendio" conn el nombre de la persona que inciio sesion 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/perfilStudents')
@@ -84,72 +67,6 @@ document.getElementById('addBtn').addEventListener('click', function() {
 
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     fetch('/materiasDisponibles')
-//         .then(response => response.json())
-//         .then(data => {
-//             const container = document.getElementById('materias-container');
-//             container.innerHTML = ''; // Limpiar el contenedor antes de agregar las materias
-
-//             if (data.success && data.materias.length > 0) {
-//                data.materias.forEach(materia => {
-//             const card = document.createElement('div');
-//             //   card.className = 'dashboard-card';
-//             card.innerHTML = `
-//                 <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-//                 <h3>${materia.subject}</h3>
-//                 <p>Profesor: ${materia.name_teachers}</p>
-//                 <p>Hora: ${materia.time}</p>
-//                 <p>Aula: ${materia.classroom}</p>
-//             `;
-//             card.addEventListener('click', function () {
-//                 materiaSeleccionada = {
-//                     subject: materia.subject,
-//                     profesor: materia.name_teachers,
-//                     classroom: materia.classroom,
-//                     time: materia.time
-//                 };
-//                 document.getElementById('modalTitulo').textContent = materia.subject;
-//                 document.getElementById('modalOpciones').style.display = 'block'; // Mostrar el modal de opciones
-//             });
-//             container.appendChild(card);
-//             });
-
-
-//               // funcion para inscribirse en la materia
-//                 document.querySelectorAll('.inscribir-btn').forEach(button => {
-//                     button.addEventListener('click', (event) => {
-//                         const subject = button.getAttribute('data-subject');
-//                         const classroom = button.getAttribute('data-classroom');
-//                         const time = button.getAttribute('data-time');
-
-//                         fetch('/inscribirMateria', {
-//                             method: 'POST',
-//                             headers: {
-//                                 'Content-Type': 'application/json'
-//                             },
-//                             body: JSON.stringify({ subject, classroom, time })
-//                         })
-//                         .then(response => response.json())
-//                         .then(data => {
-//                             if (data.success) {
-//                                 alert('Inscripción realizada con éxito');
-//                             } else {
-//                                 alert('Error al inscribirse en la materia');
-//                             }
-//                         })
-//                         .catch(error => console.error('Error al inscribirse en la materia:', error));
-//                     });
-//                 });
-//             } else {
-//                 container.innerHTML = '<p>No hay materias disponibles en este momento.</p>';
-//             }
-//         })
-//         .catch(error => console.error('Error al cargar las materias disponibles:', error));
-// });
-
-
-
 
 
 //ruta para mostrar las materias que el estudiante ya se inscribió en su dashboard
@@ -165,13 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const card = document.createElement('div');
                     card.className = 'dashboard-card';
                     card.innerHTML = `
-                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-                        <h3>${materia.subject}</h3>
+                       <div class="card-header-horizontal">
+                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon-horizontal">
+                            <h3>${materia.subject}</h3>
+                        </div>
                         <p>Profesor: ${materia.name_teachers}</p>
                         <p>Hora: ${materia.time}</p>
                         <p>Aula: ${materia.classroom}</p>
                     `;
-                   
+                             if (materia.tieneTareasPendientes) { // Cambia esto según tu backend
+        mostrarToast(`Tienes tareas en "${materia.subject}"`);
+    }
+        
                     card.addEventListener('click', function () {
                         materiaSeleccionada = {
                             subject: materia.subject,
@@ -314,3 +236,134 @@ document.getElementById('responder').addEventListener('click', function () {
         alert('⚠️ Error al enviar la respuesta');
     });
 });
+
+
+
+
+
+// registros de las tareas que ha enviado el estduiante
+function verRegistros() {
+    if (!materiaSeleccionada) {
+        alert('Selecciona una materia primero.');
+        return;
+    }
+    // Oculta otras vistas
+    document.getElementById('modalOpciones').style.display = 'none';
+    document.getElementById('materias-container').style.display = 'none';
+    document.getElementById('seccionTareas').style.display = 'none';
+    document.getElementById('user').style.display = 'none';
+    document.getElementById('vistaRegistros').style.display = 'block';
+
+    // Envía subject y classroom como query params
+    fetch(`/registros-tareas-estudiante?subject=${encodeURIComponent(materiaSeleccionada.subject)}&classroom=${encodeURIComponent(materiaSeleccionada.classroom)}`, { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('tablaRegistros');
+            tbody.innerHTML = '';
+            if (data.success && data.registros.length > 0) {
+                data.registros.forEach(reg => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${reg.title}</td>
+                            <td>${reg.respuesta}</td>
+                            <td>${new Date(reg.fecha_respuesta).toLocaleString()}</td>
+                         <td>
+                         <button class="btn-accion btn-editar" onclick="abrirEditarRespuesta(${reg.id_respuesta}, '${reg.respuesta.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-accion btn-eliminar" onclick="eliminarRespuesta(${reg.id_respuesta})">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                        </td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="3">No hay registros.</td></tr>';
+            }
+        })
+        .catch(err => {
+            alert('Error al cargar los registros');
+            console.error(err);
+        });
+}
+function volverAlDashboardDesdeRegistros() {
+    document.getElementById('vistaRegistros').style.display = 'none';
+    document.getElementById('materias-container').style.display = 'flex';
+    document.getElementById('user').style.display = 'block';
+}
+
+
+
+
+
+
+// funcion para eliminar o editar una tarea enviada
+let idRespuestaSeleccionada = null;
+
+// Abrir modal de edición
+function abrirEditarRespuesta(id_respuesta, respuesta) {
+    idRespuestaSeleccionada = id_respuesta;
+    document.getElementById('editarRespuestaTextarea').value = respuesta;
+    document.getElementById('modalEditarRespuesta').style.display = 'block';
+}
+
+function cerrarModalEditarRespuesta() {
+    document.getElementById('modalEditarRespuesta').style.display = 'none';
+}
+
+// Guardar edición
+function guardarEdicionRespuesta() {
+    const nuevaRespuesta = document.getElementById('editarRespuestaTextarea').value;
+    fetch('/editar-respuesta', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_respuesta: idRespuestaSeleccionada, respuesta: nuevaRespuesta })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Respuesta actualizada');
+            cerrarModalEditarRespuesta();
+            verRegistros(); 
+        } else {
+            alert('No se pudo actualizar');
+        }
+    });
+}
+
+// Eliminar respuesta
+function eliminarRespuesta(id_respuesta) {
+    if (!confirm('¿Seguro que quieres eliminar tu respuesta?')) return;
+    fetch('/eliminar-respuesta', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_respuesta })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Respuesta eliminada');
+            verRegistros(); 
+        } else {
+            alert('No se pudo eliminar');
+        }
+    });
+}
+
+
+
+
+// mensaje de nueva atrea asignada
+function mostrarToast(mensaje) {
+    const toast = document.getElementById('toastMensaje');
+    toast.textContent = mensaje;
+    toast.style.display = 'block';
+    toast.style.opacity = '0.95';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 400);
+    }, 3000); // 3 segundos visible
+}

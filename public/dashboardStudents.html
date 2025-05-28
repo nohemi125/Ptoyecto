@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dashboardStudents.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <title>Document</title>
 </head>
 <body>
@@ -25,7 +27,7 @@
 
 
      <div class="userName" id="user">
-            <h2>Bienvenido de nuevo, <span id="userName"> </span></h2>
+            <h2>Bienvenido, <span id="userName"> </span></h2>
         </div>
 
         <div id="teacherOverview" class="role-content teacher-only">
@@ -48,13 +50,15 @@
                 <span class="cerrar" onclick="cerrarModal()">&times;</span>
                 <h2 id="modalTitulo">Nombre de la materia</h2>
                 <div class="botones-opciones">
-                    <button onclick="verTareas()">Ver tareas</button>
+                    <button onclick="verTareas()">Ver tareas
+                         <i class="fas fa-plus-circle"></i>
+                    </button>
 
-                    <button onclick="verEstudiantes()">
-                        <i class="fas fa-users"></i> Registros
+                    <button type="button" onclick="verRegistros()" class="btn-secondary">
+                        <i class="fas fa-list"></i> Registros
                     </button>
                     <button onclick="editarClase()">
-                        <i class="fas fa-edit"></i> Editar clase
+                        <i class="fas fa-edit"></i> Editar tarea
                     </button>
                     <button onclick="cerrarModal()">
                         <i class="fas fa-times-circle"></i> Volver atrás
@@ -68,7 +72,7 @@
     
 
         <!-- Modal de tareas asignadas -->
-            <!-- Modal de tareas asignadas -->
+            
                 <div id="modalTareas" class="modal" style="display:none;">
                 <div class="modal-contenido">
                     <span class="cerrar" onclick="cerrarModal()">&times;</span>
@@ -85,57 +89,96 @@
          
 
 
-                <!-- formulario de respuestas a tareas-->
-             <div id="seccionTareas" style="display: none;">
-                 <div class="register-container" >
+            
+        
 
-                <div class="register-header">
-                    <h3>Asignación de tareas</h3>
+
+
+            <!-- esto es una prueba -->
+            <div id="seccionTareas" style="display: none;">
+                <div class="register-container">
+                    <div class="register-header">
+                        <h3>Asignación de tareas</h3>
+                    </div>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <div class="head">
+                                        <h4 class="materia-nombre"><strong>Español</strong></h4>
+                                        <h4 class="materia-profesor"><strong>Profe:</strong></h4>
+                                    </div>
+                                    <div class="desc">
+                                        <h4 class="materia-titulo"><strong>Título:</strong></h4>
+                                        <h4 class="materia-desc"><strong>Descripción:</strong></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description"><strong>Respuesta</strong></label>
+                                <div class="input-container">
+                                    <textarea id="description" rows="4" required placeholder="Escribe tu respuesta aquí..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="botones">
+                            <button class="register-btn" id="responder" type="submit">
+                                Enviar
+                            </button>
+                            <button type="button" onclick="volverAlDashboard()">
+                                Volver
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+                <!-- Vista de registros de tareas enviadas -->
+                <div id="vistaRegistros" style="display: none;">
+                    <h2>Registros de tareas enviadas</h2>
+                    <div class="tabla-contenedor">
+                        <table class="tabla-estudiantes">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Respuesta</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaRegistros">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                        <button class="btn-volver" onclick="volverAlDashboardDesdeRegistros()">Volver</button>
+
                 </div>
 
-                     <div class="form-row">
-                        <div class="form-group">
-                            <!-- <label for="title">Formulario de respuesta</label> -->
-                            <div class="input-container" >
-                             <div class="head">
-
-                              <h4>Espoañol </h4>
-                              <h4>Profe: </h4>
-                             </div>
-                              <div class="desc">
-                              <h4>titulo: </h4>
-                              <h4>Descripcion: </h4>
-                              </div>
-                              
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="description">respuestas</label> -->
-                            <div class="input-container">
-                                <textarea id="description" rows="3" required></textarea>
-                            </div>
-                        </div>
+                <!-- Modal para editar respuesta -->
+                <div id="modalEditarRespuesta" class="modal" style="display:none;">
+                <div class="modal-contenido">
+                    <span class="cerrar" onclick="cerrarModalEditarRespuesta()">&times;</span>
+                    <h2>Editar respuesta</h2>
+                    <textarea id="editarRespuestaTextarea" rows="4"></textarea>
+                    <div style="margin-top:1rem;">
+                    <button onclick="guardarEdicionRespuesta()" class="register-btn">Guardar cambios</button>
                     </div>
+                </div>
+                </div>
 
 
-                     <div class="botones">
-                        <button class="register-btn" id="responder" type="submit">
-                        Enviar
-                    </button>
 
-                    <button type="button" onclick="volverAlDashboard()">
-                        Volver
-                    </button>
-                     </div>
-                    
 
-                </form>
-            </div>
-        </div>
+                <!-- Modal para editar/eliminar respuesta -->
+
+            
          
 
-        
+
+<!-- Mensaje flotante para notificaciones -->
+<div id="toastMensaje" style="display:none;"></div>
 
         <script src="js/dashboardStudents.js"></script>
 

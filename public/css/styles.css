@@ -22,3 +22,103 @@ main {
     margin-top: 0.5rem;
     display: none;
 }
+
+
+
+
+
+
+
+/* estilo para el formuario de matriculas */
+/* Estilo para el formulario de matriculación de materias (profesor) */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 80vh;
+    background: #f8fafc;
+    padding-top: 2rem;
+}
+
+.titulo h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #388e3c;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.box {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 24px rgba(60,120,60,0.10);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.box .Subjects,
+.box .time,
+.box .classroom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9ca3af;
+}
+
+.box input[type="text"],
+.box input[type="time"] {
+    width: 100%;
+    padding: 0.7rem 0.75rem 0.7rem 2.5rem;
+    border: 1.5px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border-color 0.2s;
+}
+
+.box input[type="text"]:focus,
+.box input[type="time"]:focus {
+    border-color: #4caf4c;
+    outline: none;
+    background: #fff;
+}
+
+.btn-matricular {
+    width: 100%;
+    background-color: #4caf4c;
+    color: white;
+    padding: 0.7rem 0;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.08rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 1rem;
+    box-shadow: 0 2px 8px rgba(76,175,76,0.08);
+}
+
+.btn-matricular:hover {
+    background-color: #388e3c;
+}
+
+#error-message {
+    color: #d32f2f;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}

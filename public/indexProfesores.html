@@ -6,7 +6,9 @@
     <title>Iniciar sesión - Portal Académico</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/header.css">
-    <link rel="stylesheet" href="./css/indexProfesor.css">
+    <!-- <link rel="stylesheet" href="./css/indexProfesor.css"> -->
+         <link rel="stylesheet" href="/css/login.css">
+
 </head>
 <body>
     <header class="header">
@@ -15,10 +17,10 @@
            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg" alt="Logo" class="logo">
                 <h1>Portal Académico</h1>
             </div>
-            <nav>
+            <!-- <nav>
                 <a href="indexProfesores.html">Iniciar sesión</a>
                 <a href="registroProfesores.html">Profesores</a>
-            </nav>
+            </nav> -->
         </div>
     </header>
 
@@ -26,13 +28,13 @@
         <div class="login-container">
             <div class="login-box">
                 <div class="login-header">
-                    <h2>Iniciar sesión</h2>
-                    <p>Accede a tu cuenta académica</p>
+                    <h2>Bienvendo</h2>
+                    <p>Inicia sesion con tu cuenta de Docente</p>
                 </div>
 
-                <div class="user-type-selector">
-                    <button class="user-type-btn active" data-type="student">Estudiante</button>
-                    <button class="user-type-btn" data-type="teacher" >Profesor</button>
+                <div class="selector">
+                    <a href="index.html" class="user-type-btn" style="text-decoration: none">Estudiante</a>
+                    <a href="indexProfesores.html" class="user-type-btn active" style="text-decoration: none">Profesores</a>
                 </div>
 
                 <form class="login-form" id="loginForm">
@@ -40,12 +42,12 @@
                         <label for="email">Email</label>
                         <div class="input-container">
                             <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail.svg" alt="Email" class="input-icon">
-                            <input type="email" id="email" placeholder="tu@email.com" required>
+                            <input type="email" id="email" placeholder="correo@email.com" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="password">Contraseña</label>
+                        <label for="password">Password</label>
                         <div class="input-container">
                             <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Password" class="input-icon">
                             <input type="password" id="password" placeholder="••••••••" required>
@@ -71,5 +73,6 @@
     </main>
 
     <script src="js/mainProfesores.js"></script>
+ 
 </body>
 </html>

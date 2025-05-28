@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/dashboardProfesor.css">
-    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -19,7 +18,7 @@
             </div>
 
             <nav>
-                <a href="students.html?subject=Matematicas&classroom=Aula%20101&time=10:00%20AM">Students</a>
+               <a href="#" onclick="verTodosEstudiantes(); return false;"> estudiantes del profesor</a>
                 <a href="#" id="logoutBtn">Cerrar Sesión</a>
             </nav>
         </div>
@@ -28,7 +27,7 @@
     <main id="contenidoPrincipal">
        <div class="userName">
             <!-- Overview Section -->
-                <h2>Bienvenido de nuevo, <span id="userName">Usuario</span></h2>
+                <h2>Bienvenido Sr. <span id="userName">Usuario</span></h2>
             </div>
                 <div class="dashboard-grid" id="materias-container">
                     <div class="dashboard-card" data-subject="Matemáticas" data-classroom="101" data-time="08:00 AM">
@@ -39,14 +38,14 @@
                     </div>
 
                     <div class="dashboard-card">
-                        <button onclick="window.location.href='/Mteacher.html'">Agregar otra materia</button>       
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
+                        <button onclick="window.location.href='/Mteacher.html'">+</button>       
                     </div>
                 </div>
-
-    </main>
+        </main>
 
                         <!-- Modal de opciones -->
-            <div id="modalOpciones" class="modal">
+            <div id="modalOpciones" class="modal" style="display:none;">
             <div class="modal-contenido">
                 <span class="cerrar" onclick="cerrarModal()">&times;</span>
                 <h2 id="modalTitulo">Nombre de la materia</h2>
@@ -57,17 +56,15 @@
                     <button onclick="verEstudiantes()">
                         <i class="fas fa-users"></i> Estudiantes
                     </button>
-                    <button onclick="editarClase()">
-                        <i class="fas fa-edit"></i> Editar clase
+                    <button onclick="registroTareas()">
+                        <i class="fas fa-edit"></i> Resgistro 
                     </button>
-                    <button onclick="cerrarModal()">
-                        <i class="fas fa-times-circle"></i> Volver atrás
+                    <button onclick="verTareasEnviadas()">
+                         <i class="fas fa-edit"></i> editar tareas
                     </button>
                 </div>
             </div>
         </div>
-
-
 
 
 
@@ -132,45 +129,119 @@
                         Asignar Tarea
                     </button>
 
-                    <button type="button" onclick="volverAlModal()">
+                    <button type="button" onclick="cerrarForm()">
                         Volver
                     </button>
 
                 </form>
             </div>
         </div>
+      
+
+            <!-- VISTA PARA VER LAS TAREAS QUE LOS ESTUDIANTES RESPONDIERON -->
+                <div id="vistaRespuestas" style="display: none;">
+                    <div class="tabla-contenedor">
+                        <table class="tabla-estudiantes">
+                            <thead>
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th>Título Tarea</th>
+                                    <th>Respuesta</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaRespuestas">
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn-volver" onclick="volverAlModal()">Volver</button>
+                </div>
+
+         
+
+                     <!-- Contenedor donde irá la tabla de estudiantes que estan matriculados en una materia en especifico -->
+                    <div id="vistaEstudiantes" style="display: none;">
+                        <h2 id="tituloMateriaEstudiantes">Estudiantes inscritos en la materia</h2>
+                        <div class="tabla-contenedor">
+                            <table class="tabla-estudiantes">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Correo</th>
+                                        <th>Carrera</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaEstudiantes">
+                                    <!-- Se llena dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <button class="btn-volver" onclick="volverRespuestas()">Volver</button>
+                    </div>
 
 
-
-
-
-                            <!-- Contenedor donde irá la tabla de estudiantes -->
-                        <div id="vistaEstudiantes" style="display: none;">
-                <h2 id="tituloMateriaEstudiantes">Estudiantes inscritos en la materia</h2>
+                  <!-- Vista de todos los estudiantes del profesor -->
+            <div id="vistaTodosEstudiantes" style="display: none;">
                 <div class="tabla-contenedor">
                     <table class="tabla-estudiantes">
-                    <thead>
-                        <tr>
-                         <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                            <th>Carrera</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaEstudiantes">
-                        <!-- Se llena dinámicamente -->
-                    </tbody>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Carrera</th>
+                                <th>Email</th>
+                                <th>Materia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTodosEstudiantes">
+                            <!-- Se llena dinámicamente -->
+                        </tbody>
                     </table>
                 </div>
-                <br>
-                <button class="btn-volver" onclick="volverAlModal()">Volver</button>
-                </div>
+                <button class="btn-volver" onclick="cerrarTodosEstudiantes()">Volver</button>
+            </div>
+                                
 
 
-                  
 
-
+       
+<!-- Vista de tareas enviadas por el profesor en la materia seleccionada -->
+<div id="vistaTareasEnviadas" style="display: none;">
+    <div class="tabla-contenedor">
+        <table class="tabla-estudiantes">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Hora</th>
+                    <th>Fecha de entrega</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaTareasEnviadas">
+                <!-- Se llena dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+    <button class="btn-volver" onclick="cerrarVistaTareasEnviadas()">Volver</button>
+</div>
+                    <!-- Modal para editar tarea -->
+<div id="modalEditarTarea" class="modal" style="display:none;">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModalEditarTarea()">&times;</span>
+    <h2>Editar tarea</h2>
+    <input type="text" id="editarTituloTarea" placeholder="Título" style="width:100%;margin-bottom:10px;">
+    <textarea id="editarDescripcionTarea" rows="4" placeholder="Descripción" style="width:100%;margin-bottom:10px;"></textarea>
+    <input type="time" id="editarHoraTarea" style="width:100%;margin-bottom:10px;">
+    <input type="date" id="editarFechaTarea" style="width:100%;margin-bottom:10px;">
+    <button onclick="guardarEdicionTarea()" class="register-btn">Guardar cambios</button>
+  </div>
+</div>
 
 
     <script src="js/dasboardProfesor.js"></script>
@@ -186,87 +257,3 @@
 
 
         
-<!-- //formulario de tareas  -->
-<!--  
-   <div id="seccionTareas" style="display: none;">
-            <h2>Asignar Tarea</h2>
-            <form id="formTarea" class="formulario">
-                <input type="hidden" name="id_teacher" id="id_teacher" value="1">
-
-                <input type="text" id="materia" name="subject">
-                <label>Materia:</label>
-                <p id="materiaNombre">No seleccionada</p>
-
-                <label>Salón:</label>
-                <input type="text" name="classroom" required>
-
-                <label>Título:</label>
-                <input type="text" name="title" required>
-
-                <label>Descripción:</label>
-                <textarea name="description" required></textarea>
-
-                <label>Hora:</label>
-                <input type="time" name="time" required>
-
-                <label>Fecha de entrega:</label>
-                <input type="date" name="due_date" required>
-
-                
-            </form>
-        </div> 
-
-
-
-
-        <div class="register-container">
-            <div class="register-box">
-                <div class="register-header">
-                    <h2>Asignacion de tareas</h2>
-                    
-                </div>
-
-                <form class="register-form" id="registerForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="materia">Materia / Asignatura</label>
-                            <div class="input-container">
-                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
-                                <input type="text" id="materia"  required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="classroom">Aula</label>
-                            <div class="input-container">
-                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user.svg" alt="User" class="input-icon">
-                                <input type="text" id="classroom"  required>
-                            </div>
-                        </div>
-                    </div>
-
-                  
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="title">titulo</label>
-                            <div class="input-container">
-                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Password" class="input-icon">
-                                <input type="text" id="title"  required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Descripcion</label>
-                            <div class="input-container">
-                                <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/lock.svg" alt="Confirm Password" class="input-icon">
-                                <input type="text" id="description" required>
-                            </div>
-                        </div>
-                    </div>
-
-                     <div class="form-group">
-                        <label for="time">hora</label>
-                        <div class="input-container">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail.svg" alt="Email" class="input-icon">
-                            <input type="time" id="time"  required>
-                        </div>
-                    </div>

@@ -26,23 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success && data.materias.length > 0) {
                 data.materias.forEach(materia => {
                     const card = `
-                       <div class="dashboard-card">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon">
-                            <h3>${materia.subject}</h3>
-                            <p>Profesor: ${materia.name_teachers}</p>
-                            <p>Hora: ${materia.time}</p>
-                            <p>Aula: ${materia.classroom}</p>
-                            <div class="btn">
-                                <button class="inscribir-btn" 
-                                    data-subject="${materia.subject}" 
-                                    data-classroom="${materia.classroom}" 
-                                    data-time="${materia.time}" 
-                                    data-name-teachers="${materia.name_teachers}">
-                                    Matricular
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                      <div class="dashboard-card">
+        <div class="card-header-horizontal">
+            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon-horizontal">
+            <h3>${materia.subject}</h3>
+        </div>
+        <p>Profesor: ${materia.name_teachers}</p>
+        <p>Hora: ${materia.time}</p>
+        <p>Aula: ${materia.classroom}</p>
+        <div class="btn">
+            <button class="inscribir-btn" 
+                data-subject="${materia.subject}" 
+                data-classroom="${materia.classroom}" 
+                data-time="${materia.time}" 
+                data-name-teachers="${materia.name_teachers}">
+                Matricular
+            </button>
+        </div>
+    </div>
+`;
                     container.innerHTML += card;
                 });
 
