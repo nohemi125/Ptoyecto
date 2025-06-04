@@ -1,0 +1,29 @@
+CSS
+
+padding: Es el espacio entre el contenido del elemento y su borde (border). Es decir, es el relleno interno dentro del elemento.
+	-top arriba
+	-bottom abajo
+	- right y left lado 
+
+border: Es el borde del elemento, que rodea el padding y el contenido. Puede tener diferentes anchos, estilos y colores.
+
+margin: Es el espacio externo que hay entre el borde (border) del elemento y otros elementos. No define el ancho de la página, sino el espacio alrededor del elemento
+
+
+ son seudocódigos en css:
+HOVER: pueden haber todas las transformaciones que quiera al poner el cursor sobre el.
+
+transform: es para que cuando se ponga el cursor sobre el, cambie el tamaño
+
+transition: para el tiempo al poner el cu
+
+seudoelemento after,
+es una caja que esta delnate de un clase,pp, bton,etc.
+
+
+.ejemplo::after{
+content : "texto escrito que quiere aparezca"
+color : white;
+mas diseños para la caja
+también se le puede poner un hover
+}

@@ -7,6 +7,7 @@ document.querySelector('.login-form').addEventListener('submit', (event) => {
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    
 
     fetch('/login', {
         method: 'POST',
@@ -15,6 +16,8 @@ document.querySelector('.login-form').addEventListener('submit', (event) => {
         },
         body: JSON.stringify({ email, password })
     })
+  
+     
     .then(response => response.json())
     .then(data => {
         if (data.redirect) {

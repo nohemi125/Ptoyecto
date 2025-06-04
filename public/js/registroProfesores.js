@@ -79,14 +79,29 @@
     const confirmPassword = document.getElementById('confirmPassword').value;
     const faculty = document.getElementById('faculty').value;
     const area = document.getElementById('area').value;
-    const terms = document.getElementById('terms').checked;
+    // const terms = document.getElementById('terms').checked;
 
-    // Validación simple
-    if (!terms) {
-        document.getElementById('error-message').textContent = "Debes aceptar los términos y condiciones";
+
+
+    if (password.length < 8) {
+        document.getElementById('error-message').textContent = "Crea una contraseña mas segura, mayor a 8 digitos.";
         document.getElementById('error-message').style.display = "block";
         return;
     }
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message').textContent = "Las contraseñas no coinciden.";
+        document.getElementById('error-message').style.display = "block";
+        return;
+    }
+
+
+    // Validación simple
+    // if (!terms) {
+    //     document.getElementById('error-message').textContent = "Debes aceptar los términos y condiciones";
+    //     document.getElementById('error-message').style.display = "block";
+    //     return;
+    // }
     if (password !== confirmPassword) {
         document.getElementById('error-message').textContent = "Las contraseñas no coinciden";
         document.getElementById('error-message').style.display = "block";

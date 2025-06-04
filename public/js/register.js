@@ -1,9 +1,7 @@
 
 document.getElementById('registerForm').addEventListener('submit', function (e)
  {
-    e.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
-
-    // Capturar los datos del formulario
+    e.preventDefault(); 
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('email').value;
@@ -11,11 +9,26 @@ document.getElementById('registerForm').addEventListener('submit', function (e)
     const confirmPassword = document.getElementById('confirmPassword').value;
     const career = document.getElementById('career').value;
 
+
+
+    if (password.length < 8) {
+        document.getElementById('error-message').textContent = "La contraseña debe tener al menos 8 caracteres.";
+        document.getElementById('error-message').style.display = "block";
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message').textContent = "Las contraseñas no coinciden.";
+        document.getElementById('error-message').style.display = "block";
+        return;
+    }
+
+
     // Función para mostrar mensaje de error en el DOM
     function showError(message) {
         const errorMessage = document.getElementById('error-message');
         errorMessage.textContent = message;
-        errorMessage.style.display = 'block'; // Mostrar el contenedor
+        errorMessage.style.display = 'block'; 
     }
 
     // Validaciones

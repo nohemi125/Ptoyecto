@@ -1,15 +1,18 @@
 const express = require('express');
 const session = require('express-session'); // para guardar la info de inicio de sesion 
 const mysql = require('mysql2');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Carpeta donde se guardan los archivos
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); // Importar bcrypt
-const crypto = require('crypto'); // Para generar un token aleatorio
+const bcrypt = require('bcrypt'); 
+const crypto = require('crypto'); 
  
 const nodemailer = require('nodemailer'); 
 
 const app = express();
 const PORT = 3000;
 
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 
 
@@ -385,32 +388,44 @@ app.listen(PORT, () => {
 
 
 // ruta para registrar profesores
-// ruta para registrar profesores
 app.post('/registroProfesores', (req, res) => {
     const { first_name, last_name, email, password, faculty, area } = req.body;
 
-    if (!first_name) {
-        return res.status(400).json({ message: 'Error: El nombre del profesor es obligatorio' });
-    }
-    
-    const query = `INSERT INTO profesores (first_name, last_name, email, password, faculty, area) VALUES (?, ?, ?, ?, ?, ?)`;
-    db.query(query, [first_name, last_name, email, password, faculty, area], (err, result) => {
+    // Verifica si el email ya existe
+    db.query('SELECT id FROM profesores WHERE email = ?', [email], (err, results) => {
         if (err) {
             console.error(err);
-            return res.status(500).json({ message: 'Error al registrar el usuario' });
+            return res.status(500).json({ message: 'Error en el servidor' });
         }
-        // Redirige al login de profesores
-        res.json({ 
-            message: 'Usuario registrado exitosamente',
-            redirect: '/indexProfesores.html'
+        if (results.length > 0) {
+            return res.status(400).json({ message: ' registrate con otro correo' });
+        }
+
+        // Si no existe, inserta el nuevo profesor
+        const query = `INSERT INTO profesores (first_name, last_name, email, password, faculty, area) VALUES (?, ?, ?, ?, ?, ?)`;
+        db.query(query, [first_name, last_name, email, password, faculty, area], (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: 'Error al registrar el usuario' });
+            }
+            res.json({ 
+                success: true,
+                message: 'Usuario registrado exitosamente',
+                redirect: '/indexProfesores.html'
+            });
         });
     });
-});    
+});
+
+
 
 
 // Ruta para login de profesores funciona
 app.post('/indexProfesores', (req, res) => {
     const { email, password } = req.body;
+
+
+    
 
     const query = `SELECT * FROM profesores WHERE email = ?`;
     db.query(query, [email], (err, results) => {
@@ -418,46 +433,43 @@ app.post('/indexProfesores', (req, res) => {
             console.error(err);
             return res.status(500).send({ message: 'Error en el servidor' });
         }
-        if (results.length > 0) {
-            if (password === results[0].password) {
-                // Guardar en sesión los datos del profesor
-                req.session.user = {
-                    id: results[0].id,
-                    name: results[0].first_name                     
-                };
+       if (results.length > 0) {
+    if (password === results[0].password) {
+        req.session.user = {
+            id: results[0].id,
+            name: results[0].first_name
+        };
 
-                console.log("✅ Sesión guardada:", req.session.user); // Verifica que la sesión se guarde bien
+        const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_teacher = ?`;
+        db.query(checkMateriasQuery, [results[0].id], (err, countResults) => {
+            if (err) {
+                console.error('Error al verificar materias:', err);
+                return res.status(500).send({ message: 'Error en el servidor' });
+            }
 
-                // Verificar si el profesor ya tiene materias registradas
-                const checkMateriasQuery = `SELECT COUNT(*) AS total FROM matricula WHERE id_teacher = ?`;
-                db.query(checkMateriasQuery, [results[0].id], (err, countResults) => {
-                    if (err) {
-                        console.error('Error al verificar materias:', err);
-                        return res.status(500).send({ message: 'Error en el servidor' });
-                    }
+            const totalMaterias = countResults[0].total;
 
-                    const totalMaterias = countResults[0].total;
-
-                    if (totalMaterias > 0) {
-                        // Si ya tiene materias registradas, redirigir al dashboard
-                        res.send({
-                            message: 'Inicio de sesión exitoso',
-                            redirect: '/dashboardProfesor.html'
-                        });
-                    } else {
-                        // Si no tiene materias registradas, redirigir a la página de matrícula
-                        res.send({
-                            message: 'Inicio de sesión exitoso',
-                            redirect: '/Mteacher.html'
-                        });
-                    }
+            if (totalMaterias > 0) {
+                // Si ya tiene materias registradas, redirigir al dashboard
+                res.send({
+                    message: 'Inicio de sesión exitoso',
+                    redirect: '/dashboardProfesor.html'
                 });
             } else {
-                res.status(401).send({ message: 'Credenciales incorrectas' });
+                // Solo la PRIMERA vez, guarda la materia en sesión y redirige a matrícula
+                req.session.materiaProfesor = results[0].area;
+                res.send({
+                    message: 'Inicio de sesión exitoso',
+                    redirect: '/Mteacher.html'
+                });
             }
-        } else {
-            res.status(404).send({ message: 'Usuario no encontrado' });
-        }
+        });
+    } else {
+        res.status(401).send({ message: 'Credenciales incorrectas' });
+    }
+} else {
+    res.status(404).send({ message: 'Usuario no encontrado' });
+}
     });
 });
 
@@ -469,30 +481,78 @@ app.post('/Mteacher', (req, res) => {
     }
 
     const { subject, time, classroom } = req.body;
-    const teacherId = req.session.user.id;  // ID del profesor
-    const teacherName = req.session.user.name; // Nombre del profesor
+    const teacherId = req.session.user.id;
+    const teacherName = req.session.user.name;
 
-    // Asegúrate de que los 5 valores están correctamente definidos
-    console.log("Datos a insertar:", teacherName, subject, time, classroom, teacherId);
-
-    const query = `
-    INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher, tipo)
-    VALUES (?, ?, ?, ?, ?, ?)`;
-
-    db.query(query, [teacherName, subject, time, classroom, teacherId, 'profesor'], (err, result) => {
+    // 1. Verifica si ya existe la misma materia para este profesor
+    const checkSubjectQuery = `
+        SELECT * FROM matricula 
+        WHERE id_teacher = ? AND LOWER(subject) = LOWER(?) AND tipo = 'profesor'
+    `;
+    db.query(checkSubjectQuery, [teacherId, subject], (err, results) => {
         if (err) {
-            console.error('Error al matricular:', err);
-            return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
+            console.error('Error al verificar materia:', err);
+            return res.status(500).json({ success: false, message: 'Error al verificar la materia' });
+        }
+        if (results.length > 0) {
+            return res.status(400).json({ success: false, message: 'Ya tienes inscrita una materia con ese nombre.' });
         }
 
-        res.json({
-            success: true,
-            message: 'Materia matriculada correctamente',
-            redirect: '/dashboardProfesor.html'
+        // 2. Verifica si ya hay una materia en ese aula y horario para ese profesor
+        const checkAulaHoraQuery = `
+    SELECT * FROM matricula 
+    WHERE id_teacher = ? AND classroom = ? AND time = ? AND tipo = 'profesor'
+`;
+            db.query(checkAulaHoraQuery, [teacherId, classroom, time], (err, resultsAulaHora) => {
+                if (resultsAulaHora.length > 0) {
+                    return res.status(400).json({ success: false, message: 'Ya tienes una materia en ese aula y horario.' });
+                }
+            if (resultsAulaHora.length > 0) {
+                return res.status(400).json({ success: false, message: 'Ya tienes una materia en ese aula y horario.' });
+            }
+
+            // 3. Si no hay conflicto, inserta la nueva materia
+            const insertQuery = `
+                INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher, tipo)
+                VALUES (?, ?, ?, ?, ?, ?)
+            `;
+            db.query(insertQuery, [teacherName, subject, time, classroom, teacherId, 'profesor'], (err, result) => {
+                if (err) {
+                    console.error('Error al matricular:', err);
+                    return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
+                }
+                req.session.materiaProfesor = '';
+                res.json({
+                    success: true,
+                    message: 'Materia matriculada correctamente',
+                    redirect: '/dashboardProfesor.html'
+                });
+            });
         });
     });
 });
 
+
+
+
+app.get('/horarios-ocupados', (req, res) => {
+    const { classroom } = req.query;
+    const teacherId = req.session.user?.id;
+    if (!teacherId || !classroom) {
+        return res.json({ horarios: [] });
+    }
+    const query = `
+        SELECT time FROM matricula
+        WHERE id_teacher = ? AND classroom = ? AND tipo = 'profesor'
+    `;
+    db.query(query, [teacherId, classroom], (err, results) => {
+        if (err) {
+            return res.json({ horarios: [] });
+        }
+        const horarios = results.map(r => r.time);
+        res.json({ horarios });
+    });
+});
 
 
 //ruta para cerra sesion 
@@ -516,6 +576,13 @@ app.get('/perfilProfesor', (req, res) => {
      }
 });
 
+
+
+
+// Ruta para obtener la materia guardada en sesión al registrar
+app.get('/materia-profesor', (req, res) => {
+    res.json({ materia: req.session.materiaProfesor || '' });
+});
 
 // Ruta para obtener las materias de un profesor
 app.get('/materiasProfesor', (req, res) => {
@@ -579,12 +646,31 @@ app.get('/materiasEstudiante', (req, res) => {
     if (!req.session.user || !req.session.user.id) {
         return res.status(401).json({ success: false, message: 'No autorizado' });
     }
+
     const studentId = req.session.user.id;
+
     const query = `
-        SELECT subject, classroom, time, name_teachers 
-        FROM matricula 
-        WHERE id_student = ? AND tipo = 'estudiante'
-    `;
+  SELECT m.*, 
+    (
+       SELECT COUNT(*) FROM tareas t
+      WHERE t.subject = m.subject
+        AND t.classroom = m.classroom
+        AND t.id_teacher = (
+            SELECT m2.id_teacher
+            FROM matricula m2
+            WHERE m2.subject = m.subject
+              AND m2.classroom = m.classroom
+              AND m2.tipo = 'profesor'
+            LIMIT 1
+        )
+        AND t.id NOT IN (
+            SELECT r.id_tarea FROM respuestas r WHERE r.id_student = m.id_student
+        )
+    ) AS tareas_pendientes
+  FROM matricula m
+  WHERE m.id_student = ?
+`;
+
     db.query(query, [studentId], (err, results) => {
         if (err) {
             console.error('Error al obtener las materias del estudiante:', err);
@@ -593,8 +679,6 @@ app.get('/materiasEstudiante', (req, res) => {
         res.json({ success: true, materias: results });
     });
 });
-
-
 
 
 
@@ -656,14 +740,110 @@ app.get('/tareasMateria', (req, res) => {
       return res.status(401).json({ success: false, message: 'No hay sesión activa' });
     }
 
+   const query = `
+  SELECT t.id, t.title, t.description, t.time, t.due_date, t.file
+  FROM tareas t
+  WHERE LOWER(t.subject) = LOWER(?) AND LOWER(t.classroom) = LOWER(?)
+    AND NOT EXISTS (
+      SELECT 1 FROM respuestas r 
+      WHERE r.id_tarea = t.id AND r.id_student = ?
+    )
+`;
+
+    db.query(query, [subject.trim(), classroom.trim(), id_student], (err, results) => {
+        if (err) {
+            console.error('❌ Error al obtener tareas:', err);
+            return res.json({ success: false, tareas: [], message: 'Error en la base de datos' });
+        }
+        res.json({ success: true, tareas: results });
+    });
+});
+
+
+
+
+
+//ruta para asignar tareas desde el rol profesor a estudiante y que se guarde en la bd;
+// app.post('/asignarTarea', (req, res) => {
+//     if (!req.session.user || !req.session.user.id) {
+//         return res.status(401).send("Usuario no autenticado");
+//     }
+//     const id_teacher = req.session.user.id;
+//     const { subject, classroom, title, description, time, due_date } = req.body;
+
+//     // Validación de campos
+//     if (!subject || !classroom || !title || !description || !time || !due_date) {
+//         return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+//     }
+
+//     const query = `INSERT INTO tareas (id_teacher, subject, classroom, title, description, time, due_date)
+//                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+//     db.query(query, [id_teacher, subject, classroom, title, description, time, due_date], (err, result) => {
+//         if (err) {
+//             console.error(err);
+//             return res.status(500).send({ message: 'Error al enviar tarea ' });
+//         }
+//         res.json({ message: 'Tarea enviada' });
+//     });
+// });
+
+
+
+// convierte la hora de formato 12 horas a formato 24 horas
+function to24HourFormat(time, ampm) {
+    let [hour, minute] = time.split(':').map(Number);
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}
+
+app.post('/asignarTarea', upload.single('file'), (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+        return res.status(401).json({ success: false, message: 'No autenticado' });
+    }
+    const id_teacher = req.session.user.id;
+    let { subject, classroom, title, description, time, due_date, ampm } = req.body;
+    const file = req.file ? req.file.filename : null;
+
+    // Convierte la hora a formato 24 horas
+    time = to24HourFormat(time, ampm);
+
+    db.query(
+        'INSERT INTO tareas (id_teacher, subject, classroom, title, description, time, due_date, file) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [id_teacher, subject, classroom, title, description, time, due_date, file],
+        (err, result) => {
+            if (err) {
+                console.error('Error al guardar tarea:', err);
+                return res.json({ success: false });
+            }
+            res.json({ success: true });
+        }
+    );
+});
+
+
+
+
+//ruta pora que los estudinates puedan ver estas taeras asignadas por los profesores en el dasboard del rol de estudiante
+// VER TAREAS (estudiante)
+
+
+app.get('/tareasMateria', (req, res) => {
+    const subject = req.query.subject || '';
+    const classroom = req.query.classroom || '';
+    const id_student = req.session.user ? req.session.user.id : null;
+
+    if (!id_student) {
+      return res.status(401).json({ success: false, message: 'No hay sesión activa' });
+    }
+
     const query = `
-      SELECT t.id, t.title, t.description, t.time
-      FROM tareas t
-      WHERE LOWER(t.subject) = LOWER(?) 
-        AND LOWER(t.classroom) = LOWER(?)
+        SELECT t.id, t.title, t.description, t.time, t.due_date, t.file
+        FROM tareas t
+        WHERE LOWER(t.subject) = LOWER(?) AND LOWER(t.classroom) = LOWER(?)
         AND NOT EXISTS (
-          SELECT 1 FROM respuestas r 
-          WHERE r.id_tarea = t.id AND r.id_student = ?
+            SELECT 1 FROM respuestas r 
+            WHERE r.id_tarea = t.id AND r.id_student = ?
         )
     `;
 
@@ -680,126 +860,84 @@ app.get('/tareasMateria', (req, res) => {
 
 
 
-//ruta para asignar tareas desde el rol profesor a estudiante y que se guarde en la bd;
-app.post('/asignarTarea', (req, res) => {
-    if (!req.session.user || !req.session.user.id) {
-        return res.status(401).send("Usuario no autenticado");
-    }
-    const id_teacher = req.session.user.id;
-    const { subject, classroom, title, description, time, due_date } = req.body;
-
-    // Validación de campos
-    if (!subject || !classroom || !title || !description || !time || !due_date) {
-        return res.status(400).json({ message: 'Todos los campos son obligatorios' });
-    }
-
-    const query = `INSERT INTO tareas (id_teacher, subject, classroom, title, description, time, due_date)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    db.query(query, [id_teacher, subject, classroom, title, description, time, due_date], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send({ message: 'Error al enviar tarea ' });
-        }
-        res.json({ message: 'Tarea enviada' });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-//ruta pora que los estudinates puedan ver estas taeras asignadas por los profesores en el dasboard del rol de estudiante
-// VER TAREAS (estudiante)
-
-
-app.get('/tareasMateria', (req, res) => {
-    const subject = req.query.subject || '';
-    const classroom = req.query.classroom || '';
-    const time = req.query.time || '';
-
-    console.log('Parámetros recibidos:', { subject, classroom, time });
-
-   
-   const query = `
-SELECT id, title, description, time
-FROM tareas
-WHERE LOWER(subject) = LOWER(?) AND LOWER(classroom) = LOWER(?)
-`;
-db.query(query, [subject.trim(), classroom.trim()], (err, results) =>  {
-        if (err) {
-            console.error('❌ Error al obtener tareas:', err);
-            return res.json({ success: false, tareas: [], message: 'Error en la base de datos' });
-        }
-
-        res.json({ success: true, tareas: results });
-    });
-});
-
-
-
-
-
-
-
 //ruta para que los estduiantes respondas a las tareas asignadas por los profesores y se guarde en la bd
 // RESPONDER TAREA (estudiante)
-app.post('/responderTarea', (req, res) => {
-   
 
+app.post('/responderTarea', upload.single('file'), (req, res) => {
     const { id_tarea, respuesta } = req.body;
-    
-    if (!req.session.user) {
-        
-        return res.status(401).json({ success: false, message: 'No hay sesión activa' });
-    }
-
     const id_student = req.session.user.id;
+    const file = req.file ? req.file.filename : null;
 
-    if (!id_tarea || !id_student || !respuesta) {
-        console.log('⚠️ Faltan datos en la solicitud.');
-        return res.status(400).json({ success: false, message: 'Faltan datos' });
-    }
-
-    
-    const insertQuery = `INSERT INTO respuestas (id_tarea, id_student, respuesta) VALUES (?, ?, ?)`;
-    db.query(insertQuery, [id_tarea, id_student, respuesta], (err, result) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+    // Verifica si ya existe una respuesta para esa tarea y estudiante
+    db.query(
+        'SELECT id FROM respuestas WHERE id_tarea = ? AND id_student = ?',
+        [id_tarea, id_student],
+        (err, results) => {
+            if (err) return res.status(500).json({ success: false, message: 'Error en la consulta' });
+            if (results.length > 0) {
+                return res.status(400).json({ success: false, message: 'Ya has respondido esta tarea.' });
+            }
+            // Si no existe, inserta la respuesta
+            const insertQuery = `INSERT INTO respuestas (id_tarea, id_student, respuesta, archivo) VALUES (?, ?, ?, ?)`;
+            db.query(insertQuery, [id_tarea, id_student, respuesta, file], (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+                }
+                res.json({ success: true });
+            });
         }
-        console.log('✅ Respuesta guardada con éxito');
-        res.json({ success: true });
-    });
+    );
 });
 
 
 
 
 
-// FUNCION PARA VER LA RESPUESTA D ELOS ESTDUIANTE EN LA VISTA DE PROFESO
-// app.get('/respuestas', (req, res) => {
-//     const query = `
-//         SELECT respuestas.*, students.first_name, students.last_name
-//         FROM respuestas
-//         JOIN students ON respuestas.id_student = students.id
-//     `;
+//prueba de la ruta de arriba y funciona
+// app.post('/responderTarea', upload.single('file'), (req, res) => {
+//     const { id_tarea, respuesta } = req.body;
+//     const id_student = req.session.user.id;
+//     const file = req.file ? req.file.filename : null;
 
-//     db.query(query, (err, results) => {
-//         if (err) {
-//             console.error('Error en la consulta:', err);
-//             return res.status(500).json({ error: 'Error en la consulta' });
+//     // Consulta si la tarea está vencida directamente en MySQL
+//     const vencimientoQuery = `
+//         SELECT 
+//             due_date, time,
+//             NOW() AS ahora,
+//             CONCAT(due_date, ' ', time) AS limite,
+//             (NOW() > CONCAT(due_date, ' ', time)) AS vencida
+//         FROM tareas
+//         WHERE id = ?
+//     `;
+//     db.query(vencimientoQuery, [id_tarea], (err, results) => {
+//         if (err || results.length === 0) {
+//             return res.status(400).json({ success: false, message: 'Tarea no encontrada' });
 //         }
-//         res.json(results);
+//         if (results[0].vencida == 1) {
+//             return res.status(400).json({ success: false, message: 'Esta tarea ya se venció.' });
+//         }
+
+//         // Si no ha vencido, guarda la respuesta (ahora con archivo)
+//         const insertQuery = `INSERT INTO respuestas (id_tarea, id_student, respuesta, file) VALUES (?, ?, ?, ?)`;
+//         db.query(insertQuery, [id_tarea, id_student, respuesta, file], (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ success: false, message: 'Error al guardar la respuesta' });
+//             }
+//             res.json({ success: true });
+//         });
 //     });
 // });
 
 
 
-// esto es una prueba
+
+
+
+
+
+
+
+
 
 
 // Ruta para ver respuestas de tareas enviadas por el profesor
@@ -814,7 +952,8 @@ app.get('/respuestas-tareas-profesor', (req, res) => {
         SELECT 
             r.id, 
             r.respuesta, 
-            r.fecha_respuesta, 
+            r.fecha_respuesta,
+            r.archivo,    
             s.first_name, 
             s.last_name, 
             t.title
@@ -877,12 +1016,12 @@ app.get('/registros-tareas-estudiante', (req, res) => {
     const subject = req.query.subject;
     const classroom = req.query.classroom;
 
-    let query = `
-        SELECT r.id AS id_respuesta, t.title, r.respuesta, r.fecha_respuesta
-        FROM respuestas r
-        JOIN tareas t ON r.id_tarea = t.id
-        WHERE r.id_student = ?
-    `;
+   let query = `
+    SELECT r.id AS id_respuesta, t.title, r.respuesta, r.fecha_respuesta, r.nota, r.archivo
+    FROM respuestas r
+    JOIN tareas t ON r.id_tarea = t.id
+    WHERE r.id_student = ?
+`;
     const params = [id_student];
 
     if (subject && classroom) {
@@ -900,7 +1039,6 @@ app.get('/registros-tareas-estudiante', (req, res) => {
         res.json({ success: true, registros: results });
     });
 });
-
 
 
 
@@ -976,28 +1114,80 @@ app.delete('/eliminar-respuesta', (req, res) => {
 
 
 
+app.delete('/eliminar-tarea', (req, res) => {
+    const { id } = req.body;
+    // Elimina primero las respuestas asociadas
+    db.query('DELETE FROM respuestas WHERE id_tarea = ?', [id], (err) => {
+        if (err) {
+            console.error('Error al eliminar respuestas:', err);
+            return res.json({ success: false });
+        }
+        // Luego elimina la tarea
+        db.query('DELETE FROM tareas WHERE id = ?', [id], (err, result) => {
+            if (err) {
+                console.error('Error al eliminar tarea:', err);
+                return res.json({ success: false });
+            }
+            if (result.affectedRows > 0) {
+                res.json({ success: true });
+            } else {
+                res.json({ success: false });
+            }
+        });
+    });
+});
+
 
 // Ver tareas enviadas por el profesor
+// app.get('/tareas-enviadas-profesor', (req, res) => {
+//     if (!req.session.user || !req.session.user.id) {
+//         return res.json({ success: false, tareas: [] });
+//     }
+//     const id_teacher = req.session.user.id;
+//     const { subject, classroom } = req.query;
+
+//     let query = 'SELECT * FROM tareas WHERE id_teacher = ?';
+//     const params = [id_teacher];
+
+//     if (subject && classroom) {
+//         query += ' AND subject = ? AND classroom = ?';
+//         params.push(subject, classroom);
+//     }
+
+//     db.query(query, params, (err, results) => {
+//         if (err) return res.json({ success: false, tareas: [] });
+//         res.json({ success: true, tareas: results });
+//     });
+// });
+
+
+
+
+// esto e suna prueba
 app.get('/tareas-enviadas-profesor', (req, res) => {
     if (!req.session.user || !req.session.user.id) {
         return res.json({ success: false, tareas: [] });
     }
     const id_teacher = req.session.user.id;
-    const { subject, classroom } = req.query;
+    const subject = req.query.subject;
+    const classroom = req.query.classroom;
 
-    let query = 'SELECT * FROM tareas WHERE id_teacher = ?';
-    const params = [id_teacher];
-
-    if (subject && classroom) {
-        query += ' AND subject = ? AND classroom = ?';
-        params.push(subject, classroom);
-    }
-
-    db.query(query, params, (err, results) => {
-        if (err) return res.json({ success: false, tareas: [] });
+    const query = `
+        SELECT t.*, 
+        EXISTS (
+            SELECT 1 FROM respuestas r 
+            WHERE r.id_tarea = t.id AND r.nota IS NOT NULL
+        ) AS tiene_calificadas
+        FROM tareas t
+        WHERE t.id_teacher = ? AND t.subject = ? AND t.classroom = ?
+    `;
+    db.query(query, [id_teacher, subject, classroom], (err, results) => {
+        if (err) return res.json({ success: false });
         res.json({ success: true, tareas: results });
     });
 });
+
+
 
 // Editar tarea
 app.put('/editar-tarea', (req, res) => {
@@ -1022,5 +1212,16 @@ app.delete('/eliminar-tarea', (req, res) => {
         } else {
             res.json({ success: false });
         }
+    });
+});
+
+
+
+// RUTA ENVIAR NOTA A LOS ESTDUIANTES
+app.post('/calificar-tarea', (req, res) => {
+    const { id_respuesta, nota } = req.body;
+    db.query('UPDATE respuestas SET nota = ? WHERE id = ?', [nota, id_respuesta], (err) => {
+        if (err) return res.json({ success: false });
+        res.json({ success: true });
     });
 });

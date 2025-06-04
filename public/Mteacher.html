@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Coiny&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/Mteacher.css">
     <link rel="stylesheet" href="css/styles.css">
     
     <title>Document</title>
@@ -27,34 +28,48 @@
                 </div>
 
                 <form class="box" id="matriculaForm">
-                        <div class="Subjects">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/clipboard-list.svg" alt="Subjects" class="input-icon">
-                            <input type="text" id="subject" placeholder="Materias a dictar" required>
-                        </div>
+                <div class="form-group">
+                    <label for="subject">Materia</label>
+                    <div class="input-container">
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/clipboard-list.svg" alt="Subjects" class="input-icon">
+                        <input type="text" id="subject" name="subject" placeholder="Materias a dictar" required>
+                    </div>
+                </div>
 
-                        <div class="time">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/clock.svg" alt="Time" class="input-icon">
-                            <input type="time" id="time" placeholder="Horario" required>
-                        </div>
+                <div class="form-group">
+                    <label for="time">Horario</label>
+                    <div class="input-container">
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/clock.svg" alt="Time" class="input-icon">
+                        <select id="time" required>
+                            <option value="">Selecciona un horario</option>
+                            <option value="08:00:00">08:00 - 09:00</option>
+                            <option value="09:00:00">09:00 - 10:00</option>
+                            <option value="10:00:00">10:00 - 11:00</option>
+                            <option value="11:00:00">11:00 - 12:00</option>
+                            <option value="14:00:00">14:00 - 15:00</option>
+                            <option value="15:00:00">15:00 - 16:00</option>
+                        </select>
+                    </div>
+                </div>
 
-                        <div class="classroom">
-                            <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/school.svg" alt="Classroom" class="input-icon">
-                            <input type="text" id="classroom" placeholder="aula" required>
-                        </div>
-                
+                <div class="form-group">
+                    <label for="classroom">Aula</label>
+                    <div class="input-container">
+                        <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/school.svg" alt="Classroom" class="input-icon">
+                        <select id="classroom" required>
+                            <option value="">Selecciona un aula</option>
+                            <option value="Aula 101">Aula 101</option>
+                            <option value="Aula 102">Aula 102</option>
+                            <option value="Aula 201">Aula 201</option>
+                            <option value="Aula 202">Aula 202</option>
+                        </select>
+                    </div>
+                </div>
 
-                        <div id="error-message"></div>
-                        <button type="submit" class="btn-matricular">
-                            Matricular
-                        </button>       
-                </form>
-
-    </main>
-    <!-- <div class="video">
-        <video autoplay muted loop>
-            <source src="https://media.istockphoto.com/id/2017520935/video/university-student-girl-friends-arriving-to-university-walking-staircase-to-enter-school.mp4?s=mp4-640x640-is&k=20&c=n5_sgpdnH2z7wLULtTsvRtaM3fugO7ZjVUXpZKnv-w4=" type="video/mp4">
-        </video>
-    </div> -->
+                <div id="error-message"></div>
+                <button type="submit" class="btn-matricular">Matricular</button>
+            </form>
+    
     <script src="js/Mteacher.js"></script>
 
 </body>

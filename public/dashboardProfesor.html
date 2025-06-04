@@ -76,19 +76,19 @@
                     <h2>Asignación de tareas</h2>
                 </div>
 
-                <form class="register-form" id="formTarea">
+                <form class="register-form" id="formTarea" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="materia">Materia / Asignatura</label>
                             <div class="input-container">
-                                <input type="text" id="materia" required readonly>
+                                <input type="text" id="materia" name="subject" required readonly>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="classroom">Aula</label>
                             <div class="input-container">
-                                <input type="text" id="classroom" required readonly>
+                                <input type="text" id="classroom" name="classroom" required readonly>
                             </div>
                         </div>
                     </div>
@@ -97,14 +97,23 @@
                         <div class="form-group">
                             <label for="title">Título</label>
                             <div class="input-container">
-                                <input type="text" id="title" required>
+                                <input type="text" id="title" name="title" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="description">Descripción</label>
                             <div class="input-container">
-                                <textarea id="description" rows="3" required></textarea>
+                               <textarea id="description" name="description" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                        <div class="form-group">
+                            <label for="description">Archivo</label>
+                            <div class="input-container">
+                               <input type="file" id="file" name="file">
                             </div>
                         </div>
                     </div>
@@ -113,14 +122,14 @@
                         <div class="form-group">
                             <label for="time">Hora</label>
                             <div class="input-container">
-                                <input type="time" id="time" required>
+                                <input type="time" id="time" name="time" required>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="due_date">Fecha de entrega</label>
                             <div class="input-container">
-                                <input type="date" id="due_date" required>
+                                <input type="date" id="due_date" name="due_date" required>
                             </div>
                         </div>
                     </div>
@@ -148,6 +157,8 @@
                                     <th>Título Tarea</th>
                                     <th>Respuesta</th>
                                     <th>Fecha</th>
+                                    <th>Archivo</th>
+                                    <th>Calificación</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaRespuestas">
@@ -210,38 +221,40 @@
 
 
        
-<!-- Vista de tareas enviadas por el profesor en la materia seleccionada -->
-<div id="vistaTareasEnviadas" style="display: none;">
-    <div class="tabla-contenedor">
-        <table class="tabla-estudiantes">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Hora</th>
-                    <th>Fecha de entrega</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaTareasEnviadas">
-                <!-- Se llena dinámicamente -->
-            </tbody>
-        </table>
-    </div>
-    <button class="btn-volver" onclick="cerrarVistaTareasEnviadas()">Volver</button>
-</div>
+            <!-- Vista de tareas enviadas por el profesor en la materia seleccionada -->
+            <div id="vistaTareasEnviadas" style="display: none;">
+                <div class="tabla-contenedor">
+                    <table class="tabla-estudiantes">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>Archivo</th>
+                                <th>Hora</th>
+                                <th>Fecha de entrega</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTareasEnviadas">
+                            <!-- Se llena dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn-volver" onclick="cerrarVistaTareasEnviadas()">Volver</button>
+            </div>
                     <!-- Modal para editar tarea -->
-<div id="modalEditarTarea" class="modal" style="display:none;">
-  <div class="modal-contenido">
-    <span class="cerrar" onclick="cerrarModalEditarTarea()">&times;</span>
-    <h2>Editar tarea</h2>
-    <input type="text" id="editarTituloTarea" placeholder="Título" style="width:100%;margin-bottom:10px;">
-    <textarea id="editarDescripcionTarea" rows="4" placeholder="Descripción" style="width:100%;margin-bottom:10px;"></textarea>
-    <input type="time" id="editarHoraTarea" style="width:100%;margin-bottom:10px;">
-    <input type="date" id="editarFechaTarea" style="width:100%;margin-bottom:10px;">
-    <button onclick="guardarEdicionTarea()" class="register-btn">Guardar cambios</button>
-  </div>
-</div>
+            <div id="modalEditarTarea" class="modal" style="display:none;">
+            <div class="modal-contenido">
+                <span class="cerrar" onclick="cerrarModalEditarTarea()">&times;</span>
+                <h2>Editar tarea</h2>
+                <input type="text" id="editarTituloTarea" placeholder="Título" style="width:100%;margin-bottom:10px;">
+                <textarea id="editarDescripcionTarea" rows="4" placeholder="Descripción" style="width:100%;margin-bottom:10px;"></textarea>
+                <input type="file" id="editarArchivoTarea" style="width:100%;margin-bottom:10px;">
+                <input type="time" id="editarHoraTarea" style="width:100%;margin-bottom:10px;">
+                <input type="date" id="editarFechaTarea" style="width:100%;margin-bottom:10px;">
+                <button onclick="guardarEdicionTarea()" class="register-btn">Guardar cambios</button>
+            </div>
+            </div>
 
 
     <script src="js/dasboardProfesor.js"></script>

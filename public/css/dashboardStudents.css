@@ -651,3 +651,31 @@
   opacity: 0.95;
   transition: opacity 0.3s;
 }
+
+
+
+/* para mostrar la cantidad de tareas pendientes */
+
+
+.badge-tareas-green {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #43a047; /* verde */
+    color: #fff;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-left: 0.7rem;
+    box-shadow: 0 2px 6px rgba(67,160,71,0.12);
+}
+
+
+/* fecha visual */
+.materia-fecha-limite {
+    color: #d84315;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
