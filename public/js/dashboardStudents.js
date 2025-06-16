@@ -82,17 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(materia); // <-- AGREGA ESTA LÍNEA AQUÍ
 
                     const card = document.createElement('div');
-                    card.className = 'dashboard-card';
+                    card.className = 'card';
                     card.innerHTML = `
-                        <div class="card-header-horizontal">
+                           <div class="card-header-horizontal">
                             <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg" alt="Courses" class="card-icon-horizontal">
                             <h3>${materia.subject}</h3>
                             ${materia.tareas_pendientes > 0 ? `<span class="badge-tareas-green">${materia.tareas_pendientes}</span>` : ''}                
-                            </div>
+                        </div>
                         <p>Profesor: ${materia.name_teachers}</p>
                         <p>Hora: ${materia.time}</p>
                         <p>Aula: ${materia.classroom}</p>
-                    `;
+                         `;
+                    container.appendChild(card);
                      if (materia.tareas_pendientes > 0) {
                                                     
                         mostrarToast(`Tienes ${materia.tareas_pendientes} tareas sin responder en "${materia.subject}"`);
@@ -244,6 +245,12 @@ function volverAlDashboard() {
 
     if (!tareaSeleccionada) {
         alert('No hay ninguna tarea seleccionada.');
+        return;
+    }
+
+
+      if (!respuesta && (!archivoInput.files || archivoInput.files.length === 0)) {
+        alert('Debes escribir una respuesta o adjuntar un archivo.');
         return;
     }
 

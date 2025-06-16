@@ -1,1080 +1,483 @@
+/* Dashboard Profesor Specific Styles */
 
-.userName{
-    margin-left: 5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-   
-}
-.dashboard-grid{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    margin-top: 2rem;
-    margin-left: 5rem;
+
+
+
+
+/* estilo d ela card de estudinae */
+.badge-tareas-green {
+  background: #4caf50;
+  color: #fff;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  margin-left: 8px;
 }
 
-#materias-container {
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columnas */
-  gap: 1.5rem; /* Espacio entre las tarjetas */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
   padding: 2rem;
 }
 
-.dashboard-card{
-    width: 18rem;
-    height: 18rem;
-    border-radius: 15px;
-    border: 1px solid black;
-    padding: 2.5rem;
-    background-color: white;
-}
-
-.dashboard-card h3{
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #000000;
-    margin-bottom: 0.5rem;
-}
-
-.dashboard-card .agg{
-    display: flex;
-    align-items: center;
-    margin: 4rem 4rem;
-}
-
-.dashboard-card a{
-    color: #000000;
-    text-decoration: none;
-}
-
-.dashboard-card button{
-    margin-top: 40px;
-    width: 10rem;
-    height: 2rem;
-    border : 1px solid ;
-    border-radius: 10px;
-    background-color:white;
-    color: black;
-    font-weight: 600;
-}   
-.dashboard-card:hover{
-    transform: translateY(-2px);
-}
-
-.dashboard-card a:hover{
- border-bottom: 1px solid black;
-}
-.dashboard-card button:hover{
-    background-color: #000000;
-    color: white;
-}
-.dashboard-card button:active{
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-}
-
-
-
-
-
-
-
-.card-header-horizontal {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    margin-bottom: 1rem;
-}
-
-.card-icon-horizontal {
-    width: 2rem;
-    height: 2rem;
-    margin: 0;
-}
-
-.card-title-horizontal p {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #000000;
-    margin-left: 2rem;
-}
-
-
-
-
-/*agregar otra materia*/
-
-.agregar-materia-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    cursor: pointer;
-    border: 2px solid #4CAF50;
-    background: #f9f9f9;
-    transition: box-shadow 0.2s, border-color 0.2s;
-    min-height: 160px;
-}
-.agregar-materia-card:hover {
-    box-shadow: 0 0 10px #4CAF5033;
-    border-color: #388e3c;
-    background: #f1fff1;
-}
-.agregar-materia-contenido {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.agregar-materia-icono {
-    font-size: 3rem;
-    color: #4CAF50;
-    margin-bottom: 10px;
-}
-.agregar-materia-titulo {
-    font-size: 1.1rem;
-    color: #333;
-    font-weight: 600;
-    text-align: center;
-}
-
-
-
-
-
-/* Estilos para el modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
- 
-}
-
-
-.modal-contenido{
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 30px;
-  border-radius: 10px;
-  width: 40%;           
-  height: auto;         
-  min-height: 300px;    
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-  text-align: center;
-
-}
-
-
-.cerrar {
-  color: #aaa;
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.botones-opciones {
-  margin-top: 40px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-.botones-opciones button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; 
-  width: 45%;
-  padding: 12px;
-  font-size: 16px;
-  background-color: #4caf4c;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-align: center;
-}
-
-.botones-opciones button i {
-  font-size: 18px;
-}
-
-
-.botones-opciones button:hover {
-  background-color: #3e8e24;
-}
-
-.modal-contenido button i {
-    font-size: 20px;
-    margin-right: 10px;
-    gap: 0.5rem;
-}
-
-/* asignar tareas */
-
-
-
-
-
-#seccionTareas {
-    margin: 90px auto 10px auto; /* Top - Right - Bottom - Left */
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 45%;
-    font-size: 14px;
-}
-
-
-#seccionTareas h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 10px;  
-}
-
-#formTarea {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;  
-}
-
-#formTarea label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-#formTarea input,
-#formTarea textarea {
-    padding: 8px;  
-    font-size: 14px;  
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 8px; 
-}
-
-#formTarea input:focus,
-#formTarea textarea:focus {
-    border-color: #35dd13;
-    outline: none;
-}
-
-button {
-    padding: 8px 15px;  
-    font-size: 14px;  
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#Asignar {
-    background-color: #28a745;
-    color: white;
-}
-
-#Asignar:hover {
-    background-color: #218838;
-}
-
-#volverBtn {
-    background-color: #40dc35;
-    color: white;
-}
-
-#volverBtn:hover {
-    background-color: #3a9a20;
-}
-
-button:focus {
-    outline: none;
-}
-
-
-
-
-
-/* Estilos para la vista de lista de estudiantes */
-#vistaEstudiantes {
-    display: none;
-}
-
-#seccionTareas {
-    display: none; 
-}
-
-
-/* /* Estilo para contenedor */
-.tabla-contenedor {
-  overflow-x: auto;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilo general de la tabla */
-.tabla-estudiantes {
-  width: 60%;
-  border-collapse: collapse;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 16px;
-  min-width: 400px;
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* Cabecera de la tabla */
-.tabla-estudiantes thead {
-  background-color: #35dd13;
-  color: white;
-}
-
-/* Filas y celdas */
-.tabla-estudiantes th,
-.tabla-estudiantes td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Efecto hover en filas */
-.tabla-estudiantes tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-/* Botón volver */
-.btn-volver {
-  margin-top: 20px;
-  background-color: #35dd13;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-volver:hover {
-  background-color: #339817;
-}
-
-
-  
-
-
-/* Contenedor con más margen superior */
-.tabla-contenedor {
-  overflow-x: auto;
-  margin: 40px auto 20px; 
-  width: 80%; 
-  max-width: 800px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilo general de la tabla más compacta */
-.tabla-estudiantes {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px; 
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* Cabecera */
-.tabla-estudiantes thead {
-  background-color: #35dd13;
-  color: white;
-}
-
-/* Celdas con menos padding */
-.tabla-estudiantes th,
-.tabla-estudiantes td {
-  padding: 8px 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-
-/* Botón volver */
-.btn-volver {
-  display: block;
-  margin: 20px auto; /* Lo centra horizontalmente */
-  padding: 10px 20px;
-  background-color: #35dd13;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.btn-volver:hover {
-  background-color: #338712;
-}
-
-
-/* Título con más separación */
-#tituloMateriaEstudiantes {
-  margin-top: 50px;
-  text-align: center;
-  font-size: 20px;
-}
-
-
-  
-
-/* formulario de tareas */
-
-
-.register-container {
-    max-width: 48rem;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-}
-
-.register-box {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-}
-
-.register-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.register-header h2 {
-    font-size: 1.875rem;
-    font-weight: bold;
-    color: #4caf4c;
-}
-
-.register-header p {
-    color: #6b7280;
-    margin-top: 0.5rem;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 0.5rem;
-}
-
-.input-container {
-    position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #9ca3af;
-}
-
-.input-container input,
-.input-container select {
-    width: 100%;
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    transition: all 0.2s;
-}
-
-.input-container input:focus,
-.input-container select:focus {
-    outline: none;
-    border-color: #4caf4c;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.terms-group {
-    margin: 1.5rem 0;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #374151;
-}
-
-.terms-link {
-    color: #4caf4c;
-    text-decoration: none;
-}
-
-.terms-link:hover {
-    text-decoration: underline;
-}
-
-.register-btn {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #4caf4c;
-    color: white;
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.register-btn:hover {
-    background-color: #35dd13;
-}
-
-.btn-icon {
-    width: 1rem;
-    height: 1rem;
-}
-
-.login-link {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    color: #4b5563;
-}
-
-.login-link a {
-    color: #35dd13;
-    text-decoration: none;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-}
-
-
-.input-container textarea {
-    width: 100%;
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    transition: all 0.2s;
-    resize: vertical;
-    min-height: 80px;
-}
-
-.input-container textarea:focus {
-    outline: none;
-    border-color: #4caf4c;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-button[type="button"] {
-    margin-top: 1rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #e5e7eb; /* gris claro */
-    color: #111827; /* gris oscuro */
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-button[type="button"]:hover {
-    background-color: #d1d5db;
-}
-
-
-
-
-/* ESTILO PARA EL MODAL DE RESPUESTAS  */
-.modalrespuestas {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-}
-
-.modal-contenido {
-  background-color: white;
-  padding: 16px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 500px;
-}
-
-#tablaresPuestas {
-  width: 100%;
-  margin-top: 2rem;
-  border-collapse: collapse;
-}
-
-#tablaresPuestas h3, #tablaresPuestas h5 {
-  margin: 0;
-  margin-right: 3rem;
-}
-
-
-#cuerpoTablaRespuestas p{
- margin-left: -19rem;
- margin-bottom: 0.5rem;
-}
-#cuerpoTablaRespuestas {
-    border-bottom: 1px solid #b9bbbf;
-    margin-right: 1rem;
-    
-}
-
-.cerrar {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-
-
-
-
-
-
-/* Tabla de tareas enviadas */
-.tabla-estudiantes {
-  width: 50rem;
-  height: 6rem;
-  border-collapse: collapse;
+.card {
   background: #fff;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(60,120,60,0.08);
-}
-
-.tabla-estudiantes th, .tabla-estudiantes td {
-  padding: 14px 12px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.tabla-estudiantes th {
-  background: #388e3c;
-  color: #fff;
-  font-weight: 600;
-}
-
-.tabla-estudiantes tr:last-child td {
-  border-bottom: none;
-}
-
-
-
-/* Botones de acción */
-.btn-accion {
-  padding: 7px 18px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-right: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 1.5rem;
+  transition: box-shadow 0.2s;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  outline: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
-.btn-editar {
-  background: #1976d2;
-  color: #fff;
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
-.btn-editar:hover {
-  background: #125ea2;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(45, 80, 22, 0.15);
+  border-color: var(--color-verde-principal);
 }
 
-.btn-eliminar {
-  background: #d32f2f;
-  color: #fff;
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Main content */
+#contenidoPrincipal {
+  min-height: calc(100vh - 120px);
+  background: var(--color-beige);
+  padding-bottom: 2rem;
 }
 
-.btn-eliminar:hover {
-  background: #a31515;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Mejoras para el modal */
-.modal-contenido {
-  max-width: 420px;
-  margin: 2rem auto;
-  background: #fff;
+/* Dashboard cards for professors */
+.dashboard-card {
+  background: var(--color-blanco);
   border-radius: 12px;
-  padding: 2rem 1.5rem;
-  box-shadow: 0 4px 24px rgba(60,120,60,0.10);
+  padding: 2rem;
+  box-shadow: 0 4px 20px var(--color-sombra);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-align: center;
   position: relative;
 }
 
-.modal-contenido input,
-.modal-contenido textarea {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  border: 1.5px solid #bdbdbd;
-  border-radius: 0.6rem;
-  font-size: 1.08rem;
-  background: #f8fafc;
-  transition: border-color 0.2s;
-}
-
-.modal-contenido textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-.modal-contenido input:focus,
-.modal-contenido textarea:focus {
-  border-color: #1976d2;
-  outline: none;
-  background: #fff;
-}
-
-.cerrar {
-  position: absolute;
-  top: 1rem;
-  right: 1.2rem;
-  font-size: 1.5rem;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.cerrar:hover {
-  color: #d32f2f;
-}
-
-
-.modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-@media (min-width: 1200px) {
-  .tabla-contenedor {
-    max-width: 1200px;
-  }
-  .tabla-estudiantes {
-    min-width: 1100px;
-  }
-}
-
-
-
-
-
-
-
-
-/* .dashboard-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.dashboard-section {
-    display: none;
-}
-
-.dashboard-section.active {
-    display: block;
-}
-
-.role-content {
-    display: none;
-}
-
-
-
-body[data-role="student"] .student-only,
-body[data-role="teacher"] .teacher-only,
-body[data-role="employee"] .employee-only {
-    display: block;
-}
-
-.dashboard-section h2 {
-    font-size: 1.875rem;
-    font-weight: bold;
-    color: #111827;
-    margin-bottom: 2rem;
-}
-
-
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Crea columnas dinámicas */
-    /* gap: 1.5rem;
-    margin-bottom: 2rem;
-}
- */
-
-
-/* 
-
-.dashboard-card {
-    background-color: white;
-    width: 20rem;
-    height: 20rem;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
 .dashboard-card:hover {
-    transform: translateY(-2px);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(45, 80, 22, 0.15);
+  border-color: var(--color-verde-principal);
 }
 
-.card-icon {
-    width: 2rem;
-    height: 2rem;
-    color: #2563eb;
-    margin-bottom: 1rem;
+.dashboard-card .card-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(90deg) brightness(97%) contrast(97%);
 }
 
 .dashboard-card h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 0.5rem;
+  color: var(--color-verde-principal);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .dashboard-card p {
-    color: #6b7280;
+  color: var(--color-negro);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
-.dashboard-card  button {
-    width: 7rem;
-    height: 2rem;
-    border : 1px solid ;
-    border-radius: 9px;
-}
-.btn{
-    margin-top: 3rem;
-
-} */
- 
-
-
-
-
-
-/* 
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+/* Add button in dashboard card */
+.dashboard-card button {
+  background: var(--color-verde-principal);
+  color: var(--color-blanco);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
-.course-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.dashboard-card button:hover {
+  background: var(--color-verde-hover);
+  transform: scale(1.1);
 }
 
-.course-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+/* Form specific styles for professors */
+.register-form {
+  background: var(--color-blanco);
+  padding: 0;
 }
 
-.course-status {
-    font-size: 0.875rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
+.register-form input[readonly] {
+  background-color: var(--color-gris-claro);
+  color: var(--color-negro);
+  cursor: not-allowed;
 }
 
-.course-status.active {
-    background-color: #dcfce7;
-    color: #166534;
+/* Section styles */
+#seccionTareas {
+  background: var(--color-beige);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.grades-table {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow-x: auto;
+/* Vista respuestas */
+#vistaRespuestas {
+  background: var(--color-beige);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.grades-table table {
-    width: 100%;
-    border-collapse: collapse;
+#vistaRespuestas h2 {
+  color: var(--color-verde-principal);
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.grades-table th,
-.grades-table td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+/* Vista estudiantes */
+#vistaEstudiantes {
+  background: var(--color-beige);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.grades-table th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: #374151;
+#vistaEstudiantes h2 {
+  color: var(--color-verde-principal);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.6rem;
 }
 
-.grades-table tr:last-child td {
-    border-bottom: none;
+/* Vista todos los estudiantes */
+#vistaTodosEstudiantes {
+  background: var(--color-beige);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.admin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 1.5rem;
+/* Vista tareas enviadas */
+#vistaTareasEnviadas {
+  background: var(--color-beige);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.admin-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* Modal edit task specific styles */
+#modalEditarTarea .modal-contenido {
+  max-width: 500px;
 }
 
-.request-list {
-    margin-top: 1rem;
+#modalEditarTarea input,
+#modalEditarTarea textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--color-beige-oscuro);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  transition: border-color 0.3s ease;
 }
 
-.request-item {
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#modalEditarTarea input:focus,
+#modalEditarTarea textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-principal);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
 }
 
-.request-item:last-child {
-    border-bottom: none;
+/* Action buttons in tables */
+.tabla-estudiantes button {
+  padding: 6px 12px;
+  margin: 0 2px;
+  font-size: 0.85rem;
+  border-radius: 4px;
 }
 
-.request-actions {
-    display: flex;
-    gap: 0.5rem;
+.tabla-estudiantes button.btn-edit {
+  background: var(--color-verde-claro);
 }
 
-.reports-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+.tabla-estudiantes button.btn-delete {
+  background: #dc3545;
 }
 
-.report-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.tabla-estudiantes button.btn-edit:hover {
+  background: var(--color-verde-principal);
 }
 
-.report-content {
-    margin-top: 1rem;
+.tabla-estudiantes button.btn-delete:hover {
+  background: #c82333;
 }
 
-.report-content p {
-    margin-bottom: 0.5rem;
-}
-
-.action-btn {
-    background-color: #2563eb;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.action-btn:hover {
-    background-color: #1d4ed8;
-}
-
-.action-btn.small {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-}
-
-.action-btn.success {
-    background-color: #059669;
-}
-
-.action-btn.success:hover {
-    background-color: #047857;
-}
-
-.action-btn.danger {
-    background-color: #dc2626;
-}
-
-.action-btn.danger:hover {
-    background-color: #b91c1c;
-}
-
+/* Responsive adjustments for professor dashboard */
 @media (max-width: 768px) {
-    .dashboard-grid,
-    .courses-grid,
-    .admin-grid,
-    .reports-grid {
-        grid-template-columns: 1fr;
-    }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
 
-    .request-item {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-} */
+  .dashboard-card {
+    padding: 1.5rem;
+  }
+
+  .dashboard-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .dashboard-card button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  #seccionTareas,
+  #vistaRespuestas,
+  #vistaEstudiantes,
+  #vistaTodosEstudiantes,
+  #vistaTareasEnviadas {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-card {
+    padding: 1rem;
+  }
+
+  .dashboard-card .card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tabla-estudiantes {
+    font-size: 0.8rem;
+  }
+
+  .tabla-estudiantes th,
+  .tabla-estudiantes td {
+    padding: 8px 6px;
+  }
+
+  .tabla-estudiantes button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  #modalEditarTarea .modal-contenido {
+    width: 95%;
+    padding: 1rem;
+  }
+}
+
+/* Vista de tareas calificadas */
+#vistaNotas {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 100vh;
+}
+
+#vistaNotas .tabla-contenedor {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#vistaNotas h2 {
+    color: #2E7D32;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    width: 100%;
+}
+
+#vistaNotas .acciones-tabla {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#vistaNotas .btn-accion {
+    background-color: #2E7D32;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#vistaNotas .btn-accion:hover {
+    background-color: #1B5E20;
+}
+
+#vistaNotas .btn-accion i {
+    font-size: 18px;
+}
+
+#vistaNotas .btn-accion i.fa-star {
+    color: #FFD700;
+}
+
+#vistaNotas .tabla-estudiantes {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#vistaNotas .tabla-estudiantes th {
+    background-color: #2E7D32;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 500;
+}
+
+#vistaNotas .tabla-estudiantes td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+#vistaNotas .tabla-estudiantes tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+#vistaNotas .tabla-estudiantes tr:hover {
+    background-color: #f3f4f6;
+}
+
+#vistaNotas td:nth-child(5) {
+    font-weight: bold;
+    color: #2E7D32;
+}
+
+#vistaNotas .btn-volver {
+    background-color: #2E7D32;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+#vistaNotas .btn-volver:hover {
+    background-color: #1B5E20;
+}
+
+#vistaTareasEnviadas .tabla-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#vistaTareasEnviadas h2 {
+    margin-bottom: 15px;
+}
+
+/* Estilos comunes para todas las tablas */
+.tabla-estudiantes {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tabla-estudiantes th {
+    background-color: #2E7D32;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.tabla-estudiantes td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+.tabla-estudiantes tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.tabla-estudiantes tr:hover {
+    background-color: #f3f4f6;
+}
+
+/* Estilos comunes para botones */
+.btn-accion, .btn-volver, .btn-calificar {
+    background-color: #2E7D32;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-accion:hover, .btn-volver:hover, .btn-calificar:hover {
+    background-color: #1B5E20;
+}
+
+/* Estilos para inputs de calificación */
+input[type="number"] {
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 60px;
+    margin-right: 8px;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: #2E7D32;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}

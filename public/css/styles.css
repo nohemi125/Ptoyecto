@@ -1,125 +1,376 @@
+/* Variables de colores */
+:root {
+  --color-verde-principal: #2d5016;
+  --color-verde-claro: #4a7c59;
+  --color-verde-hover: #1a3009;
+  --color-beige: #f5f5dc;
+  --color-beige-oscuro: #e6e6cd;
+  --color-blanco: #ffffff;
+  --color-negro: #1a1a1a;
+  --color-gris-claro: #f8f9fa;
+  --color-sombra: rgba(45, 80, 22, 0.1);
+}
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f9fafb;
-    min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-beige);
+  color: var(--color-negro);
+  line-height: 1.6;
 }
 
-main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 3rem 1rem;
+/* Estilos generales para contenedores */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.error-message {
-    color: red;
+/* Estilos para formularios */
+.register-container {
+  background: var(--color-blanco);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px var(--color-sombra);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-verde-principal);
+}
+
+.register-header h2,
+.register-header h3 {
+  color: var(--color-verde-principal);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: var(--color-verde-principal);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container input,
+.input-container textarea,
+.input-container select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--color-beige-oscuro);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  transition: all 0.3s ease;
+}
+
+.input-container input:focus,
+.input-container textarea:focus,
+.input-container select:focus {
+  outline: none;
+  border-color: var(--color-verde-principal);
+  box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.input-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Botones */
+.register-btn,
+.btn-volver,
+button {
+  background: var(--color-verde-principal);
+  color: var(--color-blanco);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.register-btn:hover,
+.btn-volver:hover,
+button:hover {
+  background: var(--color-verde-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-sombra);
+}
+
+.btn-secondary {
+  background: var(--color-beige-oscuro);
+  color: var(--color-negro);
+}
+
+.btn-secondary:hover {
+  background: #d4d4aa;
+}
+
+/* Estilos para tablas */
+.tabla-contenedor {
+  background: var(--color-blanco);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px var(--color-sombra);
+  margin: 2rem 0;
+} 
+
+ .tabla-estudiantes {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-estudiantes thead {
+  background: var(--color-verde-principal);
+  color: var(--color-blanco);
+}
+
+.tabla-estudiantes th,
+.tabla-estudiantes td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-beige-oscuro);
+}
+
+.tabla-estudiantes th {
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-estudiantes tbody tr:hover {
+  background-color: var(--color-beige);
+}
+
+.tabla-estudiantes tbody tr:nth-child(even) {
+  background-color: var(--color-gris-claro);
+}
+
+/* Estilos para modales */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-contenido {
+  background-color: var(--color-blanco);
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+
+.modal-contenido textarea {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-verde-principal);
+  padding: 0.8rem;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.modal-contenido input[type="file"] {
+  margin-top: 0.5rem;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.modal-contenido .register-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+
+
+
+
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cerrar {
+  color: var(--color-negro);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.cerrar:hover {
+  color: var(--color-verde-principal);
+}
+
+/* Botones de opciones en modales */
+.botones-opciones {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.botones-opciones button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  padding: 1rem;
+  text-align: left;
+}
+
+.botones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Toast/Notificaciones */
+#toastMensaje {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--color-verde-principal);
+  color: var(--color-blanco);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--color-sombra);
+  z-index: 1001;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .modal-contenido {
+    width: 95%;
+    margin: 10% auto;
+    padding: 1.5rem;
+  }
+
+  .botones {
+    flex-direction: column;
+  }
+
+  .tabla-estudiantes {
     font-size: 0.9rem;
-    margin-top: 0.5rem;
-    display: none;
+  }
+
+  .tabla-estudiantes th,
+  .tabla-estudiantes td {
+    padding: 8px 12px;
+  }
 }
 
 
 
-
-
-
-
-/* Estilo para el formulario de matriculación de materias (profesor) */
 .main {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 80vh;
-    background: #f8fafc;
-    padding-top: 2rem;
+    justify-content: center;
+    align-items: center;     
+    background: #f5f7fa;    
+    padding: 2rem 0;
 }
 
-.titulo h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #388e3c;
-    margin-bottom: 1.5rem;
-    text-align: center;
+.input-container {
+  position: relative;
 }
 
-.box {
-    background: #fff;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 24px rgba(60,120,60,0.10);
-    padding: 2.5rem 2rem 2rem 2rem;
-    max-width: 420px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+.input-container .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  opacity: 0.7;
 }
 
-.box .Subjects,
-.box .time,
-.box .classroom {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+.input-container input,
+.input-container select {
+  padding-left: 40px; /* Espacio para el icono */
 }
-
-.input-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #9ca3af;
-}
-
-.box input[type="text"],
-.box input[type="time"] {
-    width: 100%;
-    padding: 0.7rem 0.75rem 0.7rem 2.5rem;
-    border: 1.5px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background: #f8fafc;
-    transition: border-color 0.2s;
-}
-
-.box input[type="text"]:focus,
-.box input[type="time"]:focus {
-    border-color: #4caf4c;
-    outline: none;
-    background: #fff;
-}
-
-.btn-matricular {
-    width: 100%;
-    background-color: #4caf4c;
-    color: white;
-    padding: 0.7rem 0;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1.08rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 1rem;
-    box-shadow: 0 2px 8px rgba(76,175,76,0.08);
-}
-
-.btn-matricular:hover {
-    background-color: #388e3c;
-}
-
-#error-message {
-    color: #d32f2f;
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
-}
-
-

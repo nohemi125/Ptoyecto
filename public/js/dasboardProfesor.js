@@ -230,42 +230,52 @@ function cerrarForm(){
                         return;
                     }
                     
+                    // Ocultar todas las vistas
+                    document.getElementById('vistaTareasEnviadas').style.display = 'none';
+                    document.getElementById('vistaEstudiantes').style.display = 'none';
+                    document.getElementById('seccionTareas').style.display = 'none';
                     document.getElementById('modalOpciones').style.display = 'none';
                     document.getElementById('contenidoPrincipal').style.display = 'none';
-                    document.getElementById('seccionTareas').style.display = 'none';
-                    document.getElementById('vistaRespuestas').style.display = 'block';
 
+                    // Mostrar la vista de respuestas
+                    const vistaRespuestas = document.getElementById('vistaRespuestas');
+                    vistaRespuestas.style.display = 'block';
+
+                    // Obtener y mostrar las respuestas
                     fetch(`/respuestas-tareas-profesor?subject=${encodeURIComponent(materiaSeleccionada.subject)}&classroom=${encodeURIComponent(materiaSeleccionada.classroom)}`)
-                        .then(res => res.json())
+                        .then(response => response.json())
                         .then(data => {
-                            const tbody = document.getElementById('tablaRespuestas');
-                            tbody.innerHTML = '';
+                            const tabla = document.getElementById('tablaRespuestas');
+                            tabla.innerHTML = '';
+                            
                             if (data.success && data.respuestas.length > 0) {
-                                data.respuestas.forEach(resp => {
-                                tbody.innerHTML += `
-                                    <tr>
-                                        <td>${resp.first_name} ${resp.last_name}</td>
-                                        <td>${resp.title}</td>
-                                        <td>${resp.respuesta}</td>
-                                        <td>${new Date(resp.fecha_respuesta).toLocaleString()}</td>
+                                data.respuestas.forEach(respuesta => {
+                                    const row = document.createElement('tr');
+                                    row.setAttribute('data-respuesta-id', respuesta.id);
+                                    row.innerHTML = `
+                                        <td>${respuesta.first_name} ${respuesta.last_name}</td>
+                                        <td>${respuesta.title}</td>
+                                        <td>${respuesta.respuesta}</td>
+                                        <td>${respuesta.fecha_respuesta}</td>
+                                        <td>${respuesta.archivo ? `<a href="/uploads/${respuesta.archivo}" target="_blank">Ver archivo</a>` : 'No hay archivo'}</td>
                                         <td>
-                                            ${resp.archivo ? `<a href="/uploads/${resp.archivo}" target="_blank">Ver archivo</a>` : 'Sin archivo'}
+                                            <input type="number" min="0" max="100" id="nota_${respuesta.id}" placeholder="0-100" style="width: 60px; margin-right: 5px;">
+                                            <button onclick="calificarTarea(${respuesta.id})" class="btn-calificar">
+                                                Calificar
+                                            </button>
                                         </td>
-                                        <td>
-                                            <input type="number" min="0" max="100" id="nota_${resp.id}" value="${resp.nota !== null ? resp.nota : ''}" style="width:60px;">
-                                            <button onclick="calificarTarea(${resp.id})">Calificar</button>
-                                        </td>
-                                    </tr>
-                                `;
-                            });
-                                } else {
-                                tbody.innerHTML = '<tr><td colspan="4">No hay respuestas registradas.</td></tr>';
+                                    `;
+                                    tabla.appendChild(row);
+                                });
+                            } else {
+                                tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay respuestas pendientes</td></tr>';
                             }
                         })
-                        .catch(err => {
-                            console.error('Error al cargar respuestas:', err);
+                        .catch(error => {
+                            console.error('Error al cargar respuestas:', error);
+                            alert('Error al cargar las respuestas');
                         });
-                      }
+                }
 
                         function volverAlModal() {
                     document.getElementById('vistaRespuestas').style.display = 'none';
@@ -370,6 +380,12 @@ function verTodosEstudiantes() {
 function cerrarTodosEstudiantes() {
     document.getElementById('vistaTodosEstudiantes').style.display = 'none';
     document.getElementById('contenidoPrincipal').style.display = 'block';
+    document.getElementById('sesionTareas').style.display = 'none';
+    document.getElementById('vistaTodosEstudiantes').style.display = 'none';
+    document.getElementById('sesionTareas').style.display = 'none';
+
+
+    
 }
 
 
@@ -407,21 +423,21 @@ function verTareasEnviadas() {
                            <button class="btn-accion btn-eliminar" onclick="eliminarTarea(${tarea.id})">
                                <i class="fas fa-trash"></i> Eliminar
                            </button>`
-                }
-            </td>
-        </tr>
-    `;
-});
-            } else {
-                tbody.innerHTML = '<tr><td colspan="5">No hay tareas enviadas.</td></tr>';
-            }
-        });
-}
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+                        } else {
+                       tbody.innerHTML = '<tr><td colspan="5">No hay tareas enviadas.</td></tr>';
+                    }
+                });
+        }
 
-function cerrarVistaTareasEnviadas() {
-    document.getElementById('vistaTareasEnviadas').style.display = 'none';
-    document.getElementById('contenidoPrincipal').style.display = 'block';
-}
+            function cerrarVistaTareasEnviadas() {
+                document.getElementById('vistaTareasEnviadas').style.display = 'none';
+                document.getElementById('contenidoPrincipal').style.display = 'block';
+            }
 
 
 
@@ -516,21 +532,28 @@ function guardarEdicionTarea() {
 
 // Eliminar tarea
 function eliminarTarea(id) {
-    if (!confirm('¿Seguro que quieres eliminar esta tarea?')) return;
-    fetch('/eliminar-tarea', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-           
-            verTareasEnviadas();
-        } else {
-            alert('No se pudo eliminar');
-        }
-    });
+    if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+        fetch('/eliminar-tarea', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                verTareasEnviadas(); // Actualizar la vista
+            } else {
+                alert(data.message || 'No se pudo eliminar la tarea');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar la tarea');
+        });
+    }
 }
 
 function cerrarVistaTareasMateria() {
@@ -541,21 +564,135 @@ function cerrarVistaTareasMateria() {
 
 
 
+
+
 // FUCNION PARA CALIFICAR LAS TAREAS RESPONDIDAS POR LOS ESTUDIANTES
 function calificarTarea(id_respuesta) {
     const nota = document.getElementById('nota_' + id_respuesta).value;
+    
+    if (!nota) {
+        alert('Por favor ingrese una calificación');
+        return;
+    }
+
+    const notaNum = parseFloat(nota);
+    if (isNaN(notaNum) || notaNum < 0 || notaNum > 100) {
+        alert('Por favor ingrese una calificación válida entre 0 y 100');
+        return;
+    }
+
     fetch('/calificar-tarea', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_respuesta, nota })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id_respuesta, nota: notaNum })
     })
-    .then(res => res.json())
+    .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Calificación guardada');
-            verTareasEnviadas(); // <-- refresca la tabla para desactivar los botones
+            // Eliminar la fila de la tabla de respuestas
+            const fila = document.querySelector(`tr[data-respuesta-id="${id_respuesta}"]`);
+            if (fila) {
+                fila.remove();
+            }
+
+            // Verificar si quedan respuestas por calificar
+            const tabla = document.getElementById('tablaRespuestas');
+            if (tabla.children.length === 0) {
+                tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay respuestas pendientes por calificar</td></tr>';
+            }
+
+            // Mostrar mensaje de éxito
+            alert('Tarea calificada exitosamente');
         } else {
-            alert('Error al calificar');
+            alert('Error al calificar la tarea');
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al calificar la tarea');
     });
 }
+
+
+
+function verTareasCalificadas() {
+    if (!materiaSeleccionada) {
+        alert('Selecciona una materia primero');
+        return;
+    }
+
+    console.log('Materia seleccionada:', materiaSeleccionada);
+
+    // Ocultar todas las vistas
+    document.getElementById('vistaTareasEnviadas').style.display = 'none';
+    document.getElementById('vistaRespuestas').style.display = 'none';
+    document.getElementById('vistaEstudiantes').style.display = 'none';
+    document.getElementById('seccionTareas').style.display = 'none';
+    document.getElementById('modalOpciones').style.display = 'none';
+    document.getElementById('contenidoPrincipal').style.display = 'none';
+
+    // Mostrar la vista de notas
+    const vistaNotas = document.getElementById('vistaNotas');
+    vistaNotas.style.display = 'block';
+
+    // Mostrar mensaje de carga
+    const tabla = document.getElementById('tablaCalificaciones');
+    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando tareas calificadas...</td></tr>';
+
+    const url = `/tareas-calificadas-profesor?subject=${encodeURIComponent(materiaSeleccionada.subject)}&classroom=${encodeURIComponent(materiaSeleccionada.classroom)}`;
+    console.log('Haciendo petición a:', url);
+
+    // Obtener y mostrar las tareas calificadas
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        console.log('Respuesta recibida:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Datos recibidos:', data);
+        tabla.innerHTML = '';
+        
+        if (data.success && data.tareas && data.tareas.length > 0) {
+            data.tareas.forEach(tarea => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tarea.title || ''}</td>
+                    <td>${tarea.description || ''}</td>
+                    <td>${tarea.time || ''}</td>
+                    <td>${tarea.due_date || ''}</td>
+                    <td>${tarea.nota || ''}</td>
+                    <td>${(tarea.first_name || '')} ${(tarea.last_name || '')}</td>
+                `;
+                tabla.appendChild(row);
+            });
+        } else {
+            tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay tareas calificadas</td></tr>';
+        }
+    })
+    .catch(error => {
+        console.error('Error al cargar tareas calificadas:', error);
+        tabla.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error al cargar las tareas calificadas</td></tr>';
+    });
+}
+
+function volverARespuestas() {
+    // Ocultar la vista de notas
+    document.getElementById('vistaNotas').style.display = 'none';
+    
+    // Mostrar la vista de respuestas
+    document.getElementById('vistaRespuestas').style.display = 'block';
+}
+
+

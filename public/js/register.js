@@ -23,6 +23,8 @@ document.getElementById('registerForm').addEventListener('submit', function (e)
         return;
     }
 
+  
+
 
     // Función para mostrar mensaje de error en el DOM
     function showError(message) {

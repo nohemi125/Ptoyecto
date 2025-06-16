@@ -500,32 +500,32 @@ app.post('/Mteacher', (req, res) => {
 
         // 2. Verifica si ya hay una materia en ese aula y horario para ese profesor
         const checkAulaHoraQuery = `
-    SELECT * FROM matricula 
+            SELECT * FROM matricula 
     WHERE id_teacher = ? AND classroom = ? AND time = ? AND tipo = 'profesor'
-`;
+        `;
             db.query(checkAulaHoraQuery, [teacherId, classroom, time], (err, resultsAulaHora) => {
                 if (resultsAulaHora.length > 0) {
                     return res.status(400).json({ success: false, message: 'Ya tienes una materia en ese aula y horario.' });
-                }
+            }
             if (resultsAulaHora.length > 0) {
                 return res.status(400).json({ success: false, message: 'Ya tienes una materia en ese aula y horario.' });
-            }
+                }
 
             // 3. Si no hay conflicto, inserta la nueva materia
-            const insertQuery = `
-                INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher, tipo)
-                VALUES (?, ?, ?, ?, ?, ?)
-            `;
-            db.query(insertQuery, [teacherName, subject, time, classroom, teacherId, 'profesor'], (err, result) => {
-                if (err) {
-                    console.error('Error al matricular:', err);
-                    return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
-                }
-                req.session.materiaProfesor = '';
-                res.json({
-                    success: true,
-                    message: 'Materia matriculada correctamente',
-                    redirect: '/dashboardProfesor.html'
+                const insertQuery = `
+                    INSERT INTO matricula (name_teachers, subject, time, classroom, id_teacher, tipo)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                `;
+                db.query(insertQuery, [teacherName, subject, time, classroom, teacherId, 'profesor'], (err, result) => {
+                    if (err) {
+                        console.error('Error al matricular:', err);
+                        return res.status(500).json({ success: false, message: 'Error al registrar la materia' });
+                    }
+                    req.session.materiaProfesor = '';
+                    res.json({
+                        success: true,
+                        message: 'Materia matriculada correctamente',
+                        redirect: '/dashboardProfesor.html'
                 });
             });
         });
@@ -1116,23 +1116,66 @@ app.delete('/eliminar-respuesta', (req, res) => {
 
 app.delete('/eliminar-tarea', (req, res) => {
     const { id } = req.body;
-    // Elimina primero las respuestas asociadas
-    db.query('DELETE FROM respuestas WHERE id_tarea = ?', [id], (err) => {
+    
+    // Primero verificar si la tarea tiene respuestas calificadas
+    const checkCalificacionesQuery = `
+        SELECT COUNT(*) as total_calificadas 
+        FROM respuestas 
+        WHERE id_tarea = ? AND nota IS NOT NULL
+    `;
+    
+    db.query(checkCalificacionesQuery, [id], (err, results) => {
         if (err) {
-            console.error('Error al eliminar respuestas:', err);
-            return res.json({ success: false });
+            console.error('Error al verificar calificaciones:', err);
+            return res.json({ success: false, message: 'Error al verificar calificaciones' });
         }
-        // Luego elimina la tarea
-        db.query('DELETE FROM tareas WHERE id = ?', [id], (err, result) => {
+
+        // Verificar si hay calificaciones
+        if (results[0].total_calificadas > 0) {
+            return res.json({ 
+                success: false, 
+                message: 'No se puede eliminar la tarea porque ya tiene calificaciones asignadas' 
+            });
+        }
+
+        // Verificar si la tarea existe y pertenece al profesor actual
+        const checkTareaQuery = `
+            SELECT id_teacher 
+            FROM tareas 
+            WHERE id = ?
+        `;
+        
+        db.query(checkTareaQuery, [id], (err, tareaResults) => {
             if (err) {
-                console.error('Error al eliminar tarea:', err);
-                return res.json({ success: false });
+                console.error('Error al verificar la tarea:', err);
+                return res.json({ success: false, message: 'Error al verificar la tarea' });
             }
-            if (result.affectedRows > 0) {
-                res.json({ success: true });
-            } else {
-                res.json({ success: false });
+
+            if (tareaResults.length === 0) {
+                return res.json({ success: false, message: 'La tarea no existe' });
             }
+
+            // Si no hay calificaciones, proceder con la eliminación
+            // Primero eliminar las respuestas no calificadas
+            db.query('DELETE FROM respuestas WHERE id_tarea = ? AND nota IS NULL', [id], (err) => {
+                if (err) {
+                    console.error('Error al eliminar respuestas:', err);
+                    return res.json({ success: false, message: 'Error al eliminar respuestas' });
+                }
+                
+                // Luego eliminar la tarea
+                db.query('DELETE FROM tareas WHERE id = ?', [id], (err, result) => {
+                    if (err) {
+                        console.error('Error al eliminar tarea:', err);
+                        return res.json({ success: false, message: 'Error al eliminar tarea' });
+                    }
+                    if (result.affectedRows > 0) {
+                        res.json({ success: true, message: 'Tarea eliminada correctamente' });
+                    } else {
+                        res.json({ success: false, message: 'No se pudo eliminar la tarea' });
+                    }
+                });
+            });
         });
     });
 });
@@ -1223,5 +1266,56 @@ app.post('/calificar-tarea', (req, res) => {
     db.query('UPDATE respuestas SET nota = ? WHERE id = ?', [nota, id_respuesta], (err) => {
         if (err) return res.json({ success: false });
         res.json({ success: true });
+    });
+});
+
+// Ruta para obtener las tareas calificadas
+app.get('/tareas-calificadas-profesor', (req, res) => {
+    console.log('Recibida petición para tareas calificadas');
+    
+    if (!req.session.user || !req.session.user.id) {
+        console.log('No hay sesión de usuario');
+        return res.status(401).json({ success: false, message: 'No autorizado' });
+    }
+
+    const id_teacher = req.session.user.id;
+    const { subject, classroom } = req.query;
+
+    console.log('Parámetros recibidos:', { id_teacher, subject, classroom });
+
+    if (!subject || !classroom) {
+        console.log('Faltan parámetros requeridos');
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Se requieren los parámetros subject y classroom' 
+        });
+    }
+
+    const query = `
+        SELECT t.title, t.description, t.time, t.due_date, r.nota, s.first_name, s.last_name
+        FROM tareas t
+        JOIN respuestas r ON t.id = r.id_tarea
+        JOIN students s ON r.id_student = s.id
+        WHERE t.id_teacher = ? 
+        AND t.subject = ? 
+        AND t.classroom = ?
+        AND r.nota IS NOT NULL
+        ORDER BY t.due_date DESC, s.last_name ASC
+    `;
+
+    console.log('Ejecutando query con parámetros:', [id_teacher, subject, classroom]);
+
+    db.query(query, [id_teacher, subject, classroom], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error en la consulta',
+                error: err.message 
+            });
+        }
+
+        console.log('Tareas encontradas:', results.length);
+        res.json({ success: true, tareas: results });
     });
 });

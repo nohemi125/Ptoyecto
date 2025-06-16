@@ -96,12 +96,7 @@
     }
 
 
-    // Validación simple
-    // if (!terms) {
-    //     document.getElementById('error-message').textContent = "Debes aceptar los términos y condiciones";
-    //     document.getElementById('error-message').style.display = "block";
-    //     return;
-    // }
+   
     if (password !== confirmPassword) {
         document.getElementById('error-message').textContent = "Las contraseñas no coinciden";
         document.getElementById('error-message').style.display = "block";

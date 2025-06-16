@@ -91,6 +91,7 @@
                                 <input type="text" id="classroom" name="classroom" required readonly>
                             </div>
                         </div>
+
                     </div>
 
                     <div class="form-row">
@@ -109,7 +110,7 @@
                         </div>
                     </div>
 
-                    
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="description">Archivo</label>
                             <div class="input-container">
@@ -138,7 +139,7 @@
                         Asignar Tarea
                     </button>
 
-                    <button type="button" onclick="cerrarForm()">
+                    <button type="button" class="register-btn" onclick="cerrarForm()">
                         Volver
                     </button>
 
@@ -166,6 +167,9 @@
                             </tbody>
                         </table>
                     </div>
+                    <button class="btn-accion" onclick="verTareasCalificadas()">
+                        <i class="fas fa-star"></i>  Tareas Calificadas
+                    </button>
                     <button class="btn-volver" onclick="volverAlModal()">Volver</button>
                 </div>
 
@@ -224,6 +228,7 @@
             <!-- Vista de tareas enviadas por el profesor en la materia seleccionada -->
             <div id="vistaTareasEnviadas" style="display: none;">
                 <div class="tabla-contenedor">
+                    <h2>Tareas Enviadas</h2>
                     <table class="tabla-estudiantes">
                         <thead>
                             <tr>
@@ -242,6 +247,34 @@
                 </div>
                 <button class="btn-volver" onclick="cerrarVistaTareasEnviadas()">Volver</button>
             </div>
+
+            <!-- Vista para ver las tareas calificadas del profesor a sus alumnos  -->
+            <div id="vistaNotas" style="display: none;">
+                <div class="tabla-contenedor">
+                    <h2>Tareas Calificadas</h2>
+                    <div class="acciones-tabla">
+                       
+                    </div>
+                    <table class="tabla-estudiantes">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>Hora</th>
+                                <th>Fecha de entrega</th>
+                                <th>Calificación</th>
+                                <th>Estudiante</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCalificaciones">
+                            <!-- Se llena dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn-volver" onclick="volverARespuestas()">Volver a Tareas Enviadas</button>
+            </div>
+
+
                     <!-- Modal para editar tarea -->
             <div id="modalEditarTarea" class="modal" style="display:none;">
             <div class="modal-contenido">
